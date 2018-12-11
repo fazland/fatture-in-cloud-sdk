@@ -4,6 +4,7 @@ namespace Fazland\FattureInCloud\Model\Document;
 
 use App\Utils\Json;
 use Fazland\FattureInCloud\Client\ClientInterface;
+use Fazland\FattureInCloud\Model\Subject\Address;
 use Fazland\FattureInCloud\Model\Subject\Customer;
 use Fazland\FattureInCloud\Model\Subject\CustomerList;
 use Fazland\FattureInCloud\Model\Subject\Subject;
@@ -17,11 +18,12 @@ use Money\Money;
 
 /**
  * @property null|EmbeddedTransportDocument $transportDocument
- * @property null|float $netAmount
+ * @property null|Money $netAmount
  * @property null|float $vatAmount
- * @property null|float $grossAmount
- * @property null|float $withholdingAmount
- * @property null|float $withholdingOtherAmount
+ * @property null|Money $grossAmount
+ * @property null|Money $withholdingAmount
+ * @property null|Money $withholdingOtherAmount
+ * @property Links $links
  */
 abstract class Document implements \JsonSerializable
 {
@@ -266,7 +268,7 @@ abstract class Document implements \JsonSerializable
     /**
      * The net amount of this document.
      *
-     * @var float
+     * @var Money
      */
     private $netAmount;
 
@@ -280,23 +282,28 @@ abstract class Document implements \JsonSerializable
     /**
      * The vat amount of this document.
      *
-     * @var float
+     * @var Money
      */
     private $grossAmount;
 
     /**
      * The withholding tax amount of this document.
      *
-     * @var float
+     * @var Money
      */
     private $withholdingAmount;
 
     /**
      * The withholding other amount of this document.
      *
-     * @var float
+     * @var Money
      */
     private $withholdingOtherAmount;
+
+    /**
+     * @var Links
+     */
+    private $links;
 
     /**
      * The client used to retrieve this object.
@@ -320,6 +327,7 @@ abstract class Document implements \JsonSerializable
         $this->payments = [];
         $this->autocompleteSubject = false;
         $this->autosaveSubject = false;
+        $this->links = new Links();
     }
 
     public function addProduct(Good $good): self
@@ -350,22 +358,13 @@ abstract class Document implements \JsonSerializable
     {
         switch ($name) {
             case 'transportDocument':
-                return $this->transportDocument;
-
             case 'netAmount':
-                return $this->netAmount;
-
             case 'vatAmount':
-                return $this->vatAmount;
-
             case 'grossAmount':
-                return $this->grossAmount;
-
             case 'withholdingAmount':
-                return $this->withholdingAmount;
-
             case 'withholdingOtherAmount':
-                return $this->withholdingOtherAmount;
+            case 'links':
+                return $this->$name;
 
             default:
                 throw new \Error('Undefined property "'.$name.'"');
@@ -418,7 +417,7 @@ abstract class Document implements \JsonSerializable
 
         $obj = new static();
         $obj->client = $client;
-        $obj->fromArray($result);
+        $obj->fromArray($result['dettagli_documento']);
 
         return $obj;
     }
@@ -440,7 +439,7 @@ abstract class Document implements \JsonSerializable
         $response = $this->client->request('POST', $path, $this);
 
         $result = Json::decode((string) $response->getBody(), true);
-        $this->id = $result['id'];
+        $this->id = $result['new_id'];
         $this->token = $result['token'];
 
         $path = static::getType().'/dettagli';
@@ -448,7 +447,7 @@ abstract class Document implements \JsonSerializable
             'token' => $this->token,
         ]);
 
-        $this->fromArray(Json::decode((string) $response->getBody(), true));
+        $this->fromArray(Json::decode((string) $response->getBody(), true)['dettagli_documento']);
 
         return $this;
     }
@@ -573,6 +572,7 @@ abstract class Document implements \JsonSerializable
         }
 
         $subject->name = $body['nome'];
+        $subject->address = new Address();
         $subject->address->street = $body['indirizzo_via'];
         $subject->address->zip = $body['indirizzo_cap'];
         $subject->address->city = $body['indirizzo_citta'];
@@ -594,16 +594,16 @@ abstract class Document implements \JsonSerializable
         }
 
         $this->vatIncluded = $body['prezzi_ivati'];
-        $this->netAmount = $body['importo_netto'];
+        $this->netAmount = new Money($body['importo_netto'] * 100, $this->currency);
         $this->vatAmount = $body['importo_iva'];
-        $this->grossAmount = $body['importo_totale'];
+        $this->grossAmount = new Money($body['importo_totale'] * 100, $this->currency);
 
         $this->withholdingTaxRatio = $body['rit_acconto'] ?? null;
         $this->withholdingTaxIncome = $body['imponibile_ritenuta'] ?? null;
         $this->withholdingOtherRatio = $body['rit_altra'] ?? null;
 
-        $this->withholdingAmount = $body['importo_rit_acconto'] ?? null;
-        $this->withholdingOtherAmount = $body['importo_rit_altra'] ?? null;
+        $this->withholdingAmount = isset($body['importo_rit_acconto']) ? new Money($body['importo_rit_acconto'] * 100, $this->currency) : null;
+        $this->withholdingOtherAmount = isset($body['importo_rit_altra']) ? new Money($body['importo_rit_altra'] * 100, $this->currency) : null;
 
         $this->stamp = isset($body['marca_bollo']) ? new Money($body['marca_bollo'] * 100, $this->currency) : null;
         $this->documentSubject = $body['oggetto_visibile'] ?? null;
@@ -633,18 +633,18 @@ abstract class Document implements \JsonSerializable
         if ($this->showPaymentInfo = $body['mostra_info_pagamento'] ?? false) {
             $this->paymentMethod->name = $body['metodo_pagamento'];
             $this->paymentMethod->title = \implode("\n", \array_filter([
-                $body['metodo_titolo1'],
-                $body['metodo_titolo2'],
-                $body['metodo_titolo3'],
-                $body['metodo_titolo4'],
-                $body['metodo_titolo5']
+                $body['metodo_titolo1'] ?? null,
+                $body['metodo_titolo2'] ?? null,
+                $body['metodo_titolo3'] ?? null,
+                $body['metodo_titolo4'] ?? null,
+                $body['metodo_titolo5'] ?? null,
             ])) ?: null;
             $this->paymentMethod->description = \implode("\n", \array_filter([
-                $body['metodo_desc1'],
-                $body['metodo_desc2'],
-                $body['metodo_desc3'],
-                $body['metodo_desc4'],
-                $body['metodo_desc5']
+                $body['metodo_desc1'] ?? null,
+                $body['metodo_desc2'] ?? null,
+                $body['metodo_desc3'] ?? null,
+                $body['metodo_desc4'] ?? null,
+                $body['metodo_desc5'] ?? null,
             ])) ?: null;
         }
 

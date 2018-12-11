@@ -166,7 +166,7 @@ final class PublicAdministration
             case 'documentType':
                 if (null !== $value &&
                     self::DOCUMENT_TYPE_ORDER !== $value && self::DOCUMENT_TYPE_CONTRACT !== $value &&
-                    self::DOCUMENT_TYPE_CONVENTION !== $value && self::DOCUMENT_TYPE_ANY
+                    self::DOCUMENT_TYPE_CONVENTION !== $value && self::DOCUMENT_TYPE_ANY !== $value
                 ) {
                     throw new \TypeError(sprintf(
                         'type must be one of %s or null. %s passed.',
