@@ -22,7 +22,7 @@ abstract class AbstractList implements \IteratorAggregate
      */
     private $collection;
 
-    private function __construct(ClientInterface $client, array $filters = [])
+    public function __construct(ClientInterface $client, array $filters = [])
     {
         $this->client = $client;
         $this->filters = $filters;

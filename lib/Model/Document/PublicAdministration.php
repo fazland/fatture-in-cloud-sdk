@@ -130,6 +130,13 @@ final class PublicAdministration
      */
     public $payee;
 
+    /**
+     * Status of sending through the TeamSystem FEPA.
+     *
+     * @var string
+     */
+    public $tsStatus;
+
     public function &__get($name)
     {
         switch ($name) {

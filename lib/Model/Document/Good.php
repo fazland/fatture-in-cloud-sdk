@@ -4,7 +4,7 @@ namespace Fazland\FattureInCloud\Model\Document;
 
 use Money\Money;
 
-final class Good
+final class Good implements \JsonSerializable
 {
     /**
      * Product identifier.
@@ -77,6 +77,13 @@ final class Good
     public $vatCode;
 
     /**
+     * Vat amount (read-only).
+     *
+     * @var Money
+     */
+    public $vatAmount;
+
+    /**
      * Whether this product is taxable or not.
      *
      * @var bool
@@ -123,4 +130,30 @@ final class Good
      * @var bool
      */
     public $fromWarehouse;
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize(): array
+    {
+        return \array_filter([
+            'id' => $this->id,
+            'codice' => $this->code,
+            'nome' => $this->name,
+            'um' => $this->mu,
+            'quantita' => $this->qty,
+            'descrizione' => $this->description,
+            'categoria' => $this->category,
+            'prezzo_netto' => $this->netPrice,
+            'prezzo_lordo' => $this->grossPrice,
+            'cod_iva' => $this->vatCode,
+            'tassabile' => $this->taxable,
+            'sconto' => $this->discount,
+            'applica_ra_contributi' => $this->applyWithholdingAndContributions,
+            'ordine' => $this->order,
+            'sconto_rosso' => $this->highlightDiscount,
+            'in_ddt' => $this->inTransportDocument,
+            'magazzino' => $this->fromWarehouse,
+        ]);
+    }
 }
