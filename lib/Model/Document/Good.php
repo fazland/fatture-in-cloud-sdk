@@ -144,8 +144,8 @@ final class Good implements \JsonSerializable
             'quantita' => $this->qty,
             'descrizione' => $this->description,
             'categoria' => $this->category,
-            'prezzo_netto' => $this->netPrice,
-            'prezzo_lordo' => $this->grossPrice,
+            'prezzo_netto' => null !== $this->netPrice ? $this->netPrice->getAmount() / 100.0 : null,
+            'prezzo_lordo' => null !== $this->grossPrice ? $this->grossPrice->getAmount() / 100.0 : null,
             'cod_iva' => $this->vatCode,
             'tassabile' => $this->taxable,
             'sconto' => $this->discount,
@@ -154,6 +154,8 @@ final class Good implements \JsonSerializable
             'sconto_rosso' => $this->highlightDiscount,
             'in_ddt' => $this->inTransportDocument,
             'magazzino' => $this->fromWarehouse,
-        ]);
+        ], function ($value): bool {
+            return null !== $value && '' !== $value;
+        });
     }
 }

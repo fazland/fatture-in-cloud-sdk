@@ -2,6 +2,7 @@
 
 namespace Fazland\FattureInCloud\Model\Document;
 
+use App\Utils\Json;
 use Fazland\FattureInCloud\Client\ClientInterface;
 use Fazland\FattureInCloud\Model\Subject\Customer;
 use Fazland\FattureInCloud\Model\Subject\CustomerList;
@@ -383,11 +384,18 @@ abstract class Document implements \JsonSerializable
                     ));
                 }
 
-                return $this->transportDocument = $value;
+                break;
 
             default:
                 throw new \Error('Undefined property "'.$name.'"');
         }
+
+        $accessor = function & () use ($name, $value) {
+            return $this->$name;
+        };
+        $return = & $accessor();
+
+        return $return;
     }
 
     /**
@@ -400,7 +408,7 @@ abstract class Document implements \JsonSerializable
      */
     public static function get(string $token, ClientInterface $client): self
     {
-        $path = '/'.static::getType().'/dettagli';
+        $path = static::getType().'/dettagli';
 
         $response = $client->request('POST', $path, [
             'token' => $token,
@@ -427,7 +435,7 @@ abstract class Document implements \JsonSerializable
     public function create(ClientInterface $client): self
     {
         $this->client = $client;
-        $path = '/'.static::getType().'/nuovo';
+        $path = static::getType().'/nuovo';
 
         $response = $this->client->request('POST', $path, $this);
 
@@ -435,7 +443,7 @@ abstract class Document implements \JsonSerializable
         $this->id = $result['id'];
         $this->token = $result['token'];
 
-        $path = '/'.static::getType().'/dettagli';
+        $path = static::getType().'/dettagli';
         $response = $client->request('POST', $path, [
             'token' => $this->token,
         ]);

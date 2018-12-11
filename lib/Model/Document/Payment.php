@@ -2,7 +2,7 @@
 
 namespace Fazland\FattureInCloud\Model\Document;
 
-final class Payment
+final class Payment implements \JsonSerializable
 {
     /**
      * Payment due date.
@@ -33,4 +33,17 @@ final class Payment
      * @var \DateTimeInterface
      */
     public $settlementDate;
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize(): array
+    {
+        return \array_filter([
+            'data_scadenza' => null !== $this->dueDate ? $this->dueDate->format('d/m/Y') : null,
+            'importo' => $this->amount,
+            'metodo' => $this->method,
+            'data_saldo' => null !== $this->settlementDate ? $this->settlementDate->format('d/m/Y') : null,
+        ]);
+    }
 }

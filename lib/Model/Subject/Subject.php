@@ -108,7 +108,7 @@ abstract class Subject implements \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function &__get($name)
+    public function __get($name)
     {
         switch ($name) {
             case 'phone':
@@ -129,22 +129,31 @@ abstract class Subject implements \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function &__set($name, $value)
+    public function & __set($name, $value)
     {
         switch ($name) {
             case 'phone':
-                return $this->phone = $value ?
+                $value = $value ?
                     PhoneNumberUtil::getInstance()->parse($value, 'IT') :
                     null;
+                break;
 
             case 'fax':
-                return $this->fax = $value ?
+                $value = $value ?
                     PhoneNumberUtil::getInstance()->parse($value, 'IT') :
                     null;
+                break;
 
             default:
                 throw new \Error('Undefined property "'.$name.'"');
         }
+
+        $accessor = function & () use ($name, $value) {
+            return $this->$name;
+        };
+        $return = & $accessor();
+
+        return $return;
     }
 
     /**

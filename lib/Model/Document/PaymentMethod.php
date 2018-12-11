@@ -30,21 +30,21 @@ final class PaymentMethod implements \JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        if (substr_count($this->title, "\n") > 4) {
+        if (substr_count($this->title ?? '', "\n") > 4) {
             throw new \RuntimeException('Payment method title cannot contain more than 5 lines');
         }
 
-        if (substr_count($this->description, "\n") > 4) {
+        if (substr_count($this->description ?? '', "\n") > 4) {
             throw new \RuntimeException('Payment method description cannot contain more than 5 lines');
         }
 
         $ret = ['metodo_pagamento' => $this->name];
 
-        foreach (explode("\n", $this->title) as $i => $line) {
+        foreach (explode("\n", $this->title ?? '') as $i => $line) {
             $ret['metodo_titolo'.($i + 1)] = $line;
         }
 
-        foreach (explode("\n", $this->description) as $i => $line) {
+        foreach (explode("\n", $this->description ?? '') as $i => $line) {
             $ret['metodo_desc'.($i + 1)] = $line;
         }
 

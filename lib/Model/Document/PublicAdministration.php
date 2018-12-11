@@ -161,7 +161,7 @@ final class PublicAdministration
                     ));
                 }
 
-                return $this->type = $value;
+                break;
 
             case 'documentType':
                 if (null !== $value &&
@@ -175,10 +175,17 @@ final class PublicAdministration
                     ));
                 }
 
-                return $this->documentType = $value;
+                break;
 
             default:
                 throw new \Error('Undefined property "'.$name.'"');
         }
+
+        $accessor = function & () use ($name, $value) {
+            return $this->$name;
+        };
+        $return = & $accessor();
+
+        return $return;
     }
 }
