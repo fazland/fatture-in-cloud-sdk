@@ -52,7 +52,7 @@ class Client implements ClientInterface
         $requestData['api_uid'] = $this->uid;
         $requestData['api_key'] = $this->key;
 
-        if (0 === \count(\array_filter($headers, function ($key): \bool {
+        if (0 === \count(\array_filter($headers, function ($key): bool {
             return 'content-type' === \strtolower((string) $key);
         }, ARRAY_FILTER_USE_KEY))) {
             $headers['Content-Type'] = 'application/json';

@@ -19,6 +19,20 @@ abstract class Document implements \JsonSerializable
     public const TOTALS_HIDE_ALL = 'nessuno';
 
     /**
+     * Document identifier.
+     *
+     * @var string
+     */
+    public $id;
+
+    /**
+     * Permanent identifier of the document.
+     *
+     * @var string
+     */
+    public $token;
+
+    /**
      * Customer or supplier.
      *
      * @var Subject
@@ -238,6 +252,20 @@ abstract class Document implements \JsonSerializable
      */
     private $autosaveSubject;
 
+    /**
+     * The client used to retrieve this object.
+     *
+     * @var ClientInterface
+     */
+    private $client;
+
+    /**
+     * The original data, as fetched from the APIs.
+     *
+     * @var array
+     */
+    private $originalData;
+
     public function __construct()
     {
         $this->currency = new Currency('EUR');
@@ -260,6 +288,16 @@ abstract class Document implements \JsonSerializable
         $this->payments[] = $payment;
 
         return $this;
+    }
+
+    public function enableAutocompleteSubject(): void
+    {
+        $this->autocompleteSubject = true;
+    }
+
+    public function enableAutosaveSubject(): void
+    {
+        $this->autosaveSubject = true;
     }
 
     public function &__get($name)
@@ -290,6 +328,29 @@ abstract class Document implements \JsonSerializable
             default:
                 throw new \Error('Undefined property "'.$name.'"');
         }
+    }
+
+    /**
+     * Creates a new object on the API server.
+     *
+     * @param ClientInterface $client
+     *
+     * @return self
+     *
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public function create(ClientInterface $client): self
+    {
+        $this->client = $client;
+        $path = '/'.static::getType().'/nuovo';
+
+        $response = $this->client->request('POST', $path, $this);
+
+        $result = Json::decode((string) $response->getBody(), true);
+        $this->id = $result['id'];
+        $this->token = $result['token'];
+
+        return $this;
     }
 
     public function jsonSerialize()
