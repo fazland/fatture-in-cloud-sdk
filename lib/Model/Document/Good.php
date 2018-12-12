@@ -77,9 +77,9 @@ final class Good implements \JsonSerializable
     public $vatCode;
 
     /**
-     * Vat amount (read-only).
+     * Vat percentile (read-only).
      *
-     * @var Money
+     * @var float
      */
     public $vatAmount;
 

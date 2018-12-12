@@ -19,7 +19,7 @@ use Money\Money;
 /**
  * @property null|EmbeddedTransportDocument $transportDocument
  * @property null|Money $netAmount
- * @property null|float $vatAmount
+ * @property null|Money $vatAmount
  * @property null|Money $grossAmount
  * @property null|Money $withholdingAmount
  * @property null|Money $withholdingOtherAmount
@@ -595,7 +595,7 @@ abstract class Document implements \JsonSerializable
 
         $this->vatIncluded = $body['prezzi_ivati'];
         $this->netAmount = new Money($body['importo_netto'] * 100, $this->currency);
-        $this->vatAmount = $body['importo_iva'];
+        $this->vatAmount = new Money($body['importo_iva'] * 100, $this->currency);
         $this->grossAmount = new Money($body['importo_totale'] * 100, $this->currency);
 
         $this->withholdingTaxRatio = $body['rit_acconto'] ?? null;
@@ -666,7 +666,7 @@ abstract class Document implements \JsonSerializable
             $good->category = $item['categoria'] ?? null;
             $good->netPrice = isset($item['prezzo_netto']) ? new Money($item['prezzo_netto'] * 100, $this->currency) : null;
             $good->grossPrice = isset($item['prezzo_lordo']) ? new Money($item['prezzo_lordo'] * 100, $this->currency) : null;
-            $good->vatAmount = isset($item['valore_iva']) ? new Money($item['valore_iva'] * 100, $this->currency) : null;
+            $good->vatAmount = $item['valore_iva'] ?? null;
             $good->taxable = $item['tassabile'] ?? null;
             $good->discount = $item['sconto'] ?? null;
             $good->applyWithholdingAndContributions = $item['applica_ra_contributi'] ?? null;
