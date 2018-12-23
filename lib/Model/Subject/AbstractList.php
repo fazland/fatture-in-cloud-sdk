@@ -95,11 +95,11 @@ abstract class AbstractList implements \IteratorAggregate
     {
         foreach ($data as $datum) {
             $subject = $this->createSubject($this->client, $datum);
-            if (isset($this->collection[$subject->getId()])) {
+            if (isset($this->collection[$subject->id])) {
                 continue;
             }
 
-            yield $this->collection[$subject->getId()] = $subject;
+            yield $this->collection[$subject->id] = $subject;
         }
     }
 }
