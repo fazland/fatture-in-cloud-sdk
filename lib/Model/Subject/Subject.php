@@ -195,7 +195,7 @@ abstract class Subject implements \JsonSerializable
     public function create(ClientInterface $client): self
     {
         $this->client = $client;
-        $path = '/'.($this instanceof Supplier ? 'fornitori' : 'clienti').'/nuovo';
+        $path = ($this instanceof Supplier ? 'fornitori' : 'clienti').'/nuovo';
 
         $response = $this->client->request('POST', $path, $this);
 
@@ -222,7 +222,7 @@ abstract class Subject implements \JsonSerializable
             return $this;
         }
 
-        $path = '/'.($this instanceof Supplier ? 'fornitori' : 'clienti').'/modifica';
+        $path = ($this instanceof Supplier ? 'fornitori' : 'clienti').'/modifica';
         $this->client->request('POST', $path, $update);
 
         return $this;
@@ -237,7 +237,7 @@ abstract class Subject implements \JsonSerializable
      */
     public function delete(): self
     {
-        $path = '/'.($this instanceof Supplier ? 'fornitori' : 'clienti').'/elimina';
+        $path = ($this instanceof Supplier ? 'fornitori' : 'clienti').'/elimina';
         $this->client->request('POST', $path, [
             'id' => $this->id,
         ]);
