@@ -43,7 +43,7 @@ abstract class AbstractList implements \IteratorAggregate
         for ($i = $currentPage; $i < $pages; ++$i) {
             $filters['pagina'] = $i;
 
-            $response = $this->client->request('POST', '/'.$this->getType().'/lista', $filters);
+            $response = $this->client->request('POST', $this->getType().'/lista', $filters);
             $data = Json::decode((string) $response->getBody(), true);
 
             $pages = $data['numero_pagine'];
@@ -60,7 +60,7 @@ abstract class AbstractList implements \IteratorAggregate
      */
     public function bulkCreate(Subject ...$subjects): self
     {
-        $this->client->request('POST', '/'.$this->getType().'/importa', [
+        $this->client->request('POST', $this->getType().'/importa', [
             'lista_soggetti' => $subjects,
         ]);
 
