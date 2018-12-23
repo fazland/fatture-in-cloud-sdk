@@ -20,7 +20,7 @@ class RequestException extends \RuntimeException
     public function __construct(RequestInterface $request, ResponseInterface $response)
     {
         $body = json_decode((string) $response->getBody());
-        parent::__construct('Error while executing request: '.$body->error);
+        parent::__construct('Error while executing request: '.($body->error ?? $response->getReasonPhrase() ?: 'Unknown error'));
 
         $this->request = $request;
         $this->response = $response;

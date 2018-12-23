@@ -5,6 +5,7 @@ namespace Fazland\FattureInCloud\Client;
 use Fazland\FattureInCloud\Exception\Request\BadResponseException;
 use Fazland\FattureInCloud\Exception\Request\RequestException;
 use Fazland\FattureInCloud\Util\Json;
+use Http\Client\Exception\HttpException;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\MessageFactory;
 use Psr\Http\Client\ClientInterface as HttpClientInterface;
@@ -52,18 +53,22 @@ class Client implements ClientInterface
         $requestData['api_uid'] = $this->uid;
         $requestData['api_key'] = $this->key;
 
-        if (0 === \count(\array_filter($headers, function ($key): bool {
-            return 'content-type' === \strtolower((string) $key);
-        }, ARRAY_FILTER_USE_KEY))) {
-            $headers['Content-Type'] = 'application/json';
-        }
+        $headers['Content-Type'] = 'application/json';
+        $headers['Accept'] = 'application/json';
 
         $request = self::getMessageFactory()->createRequest($method, $path, $headers, \json_encode($requestData));
-        $response = $this->http->sendRequest($request);
+        try {
+            $response = $this->http->sendRequest($request);
 
-        $contentTypeHeader = $response->getHeader('Content-Type');
-        if (empty($contentTypeHeader) || ! \preg_match('#^application/json#', $contentTypeHeader[0])) {
-            throw new BadResponseException($request, $response);
+            if (
+                200 !== $response->getStatusCode() ||
+                empty($contentTypeHeader = $response->getHeader('Content-Type')) ||
+                !\preg_match('#^application/json#', $contentTypeHeader[0])
+            ) {
+                throw new BadResponseException($request, $response);
+            }
+        } catch (HttpException $e) {
+            throw new BadResponseException($e->getRequest(), $e->getResponse());
         }
 
         $body = Json::decode((string) $response->getBody());
