@@ -10,7 +10,7 @@ abstract class AbstractList implements \IteratorAggregate
     /**
      * @var ClientInterface
      */
-    private $client;
+    protected $client;
 
     /**
      * @var array
