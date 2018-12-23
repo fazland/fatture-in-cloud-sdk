@@ -398,6 +398,14 @@ abstract class Document implements \JsonSerializable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function __isset($name): bool
+    {
+        return isset($this->$name);
+    }
+
+    /**
      * Gets the document details.
      *
      * @param string $token

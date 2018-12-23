@@ -188,4 +188,12 @@ final class PublicAdministration
 
         return $return;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __isset($name): bool
+    {
+        return isset($this->$name);
+    }
 }

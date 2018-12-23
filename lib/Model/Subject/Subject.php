@@ -3,6 +3,7 @@
 namespace Fazland\FattureInCloud\Model\Subject;
 
 use Fazland\FattureInCloud\Client\ClientInterface;
+use Fazland\FattureInCloud\Exception\NotFoundException;
 use Fazland\FattureInCloud\Util\Json;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
@@ -166,6 +167,14 @@ abstract class Subject implements \JsonSerializable
     /**
      * {@inheritdoc}
      */
+    public function __isset($name): bool
+    {
+        return isset($this->$name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function jsonSerialize(): array
     {
         $address = $this->address->jsonSerialize();
@@ -189,6 +198,38 @@ abstract class Subject implements \JsonSerializable
             'cf' => $this->fiscalCode,
             'extra' => $this->extra,
         ] + $address);
+    }
+
+    /**
+     * Fetches a subject from the API.
+     *
+     * @param string $id
+     * @param ClientInterface $client
+     *
+     * @return Subject
+     *
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public static function get(string $id, ClientInterface $client): self
+    {
+        $obj = new static();
+        $obj->client = $client;
+
+        $type = $obj instanceof Supplier ? 'fornitori' : 'clienti';
+        $path = $type.'/nuovo';
+
+        $response = $client->request('POST', $path, [
+            'id' => $id,
+        ]);
+
+        $result = Json::decode((string) $response->getBody(), true);
+        $list = $result['lista_'.$type];
+
+        if (empty($list)) {
+            throw new NotFoundException('Resource id #'.$id.' has not been found');
+        }
+
+        return $obj->fromArray($list[0]);
     }
 
     /**
