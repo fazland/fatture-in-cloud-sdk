@@ -50,6 +50,13 @@ abstract class Subject implements \JsonSerializable
     public $country;
 
     /**
+     * Subject country iso.
+     *
+     * @var string
+     */
+    public $countryIso;
+
+    /**
      * Subject email address.
      *
      * @var string
@@ -174,6 +181,7 @@ abstract class Subject implements \JsonSerializable
             'nome' => $this->name,
             'referente' => $this->reference,
             'paese' => $this->country,
+            'paese_iso' => $this->countryIso,
             'mail' => $this->mail,
             'tel' => $this->phone ? $phoneUtil->format($this->phone, PhoneNumberFormat::E164) : null,
             'fax' => $this->fax ? $phoneUtil->format($this->fax, PhoneNumberFormat::E164) : null,
@@ -263,6 +271,7 @@ abstract class Subject implements \JsonSerializable
         $this->name = $data['nome'] ?? null;
         $this->reference = $data['referente'] ?? null;
         $this->country = $data['paese'] ?? null;
+        $this->countryIso = $data['paese_iso'] ?? null;
         $this->mail = $data['mail'] ?? null;
         $this->__set('phone', $data['tel'] ?? null);
         $this->__set('fax', $data['tel'] ?? null);
