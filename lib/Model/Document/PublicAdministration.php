@@ -182,7 +182,7 @@ final class PublicAdministration
         }
 
         $accessor = function & () use ($name, $value) {
-            return $this->$name;
+            return $this->$name = $value;
         };
         $return = & $accessor();
 

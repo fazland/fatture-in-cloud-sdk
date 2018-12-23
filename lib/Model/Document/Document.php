@@ -2,14 +2,12 @@
 
 namespace Fazland\FattureInCloud\Model\Document;
 
-use App\Utils\Json;
 use Fazland\FattureInCloud\Client\ClientInterface;
 use Fazland\FattureInCloud\Model\Subject\Address;
 use Fazland\FattureInCloud\Model\Subject\Customer;
-use Fazland\FattureInCloud\Model\Subject\CustomerList;
 use Fazland\FattureInCloud\Model\Subject\Subject;
 use Fazland\FattureInCloud\Model\Subject\Supplier;
-use Fazland\FattureInCloud\Model\Subject\SupplierList;
+use Fazland\FattureInCloud\Util\Json;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use Money\Currency;
@@ -390,7 +388,7 @@ abstract class Document implements \JsonSerializable
         }
 
         $accessor = function & () use ($name, $value) {
-            return $this->$name;
+            return $this->$name = $value;
         };
         $return = & $accessor();
 
