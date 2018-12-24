@@ -216,7 +216,7 @@ abstract class Subject implements \JsonSerializable
         $obj->client = $client;
 
         $type = $obj instanceof Supplier ? 'fornitori' : 'clienti';
-        $path = $type.'/nuovo';
+        $path = $type.'/lista';
 
         $response = $client->request('POST', $path, [
             'id' => $id,
