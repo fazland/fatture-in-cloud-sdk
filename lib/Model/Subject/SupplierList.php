@@ -14,9 +14,9 @@ final class SupplierList extends AbstractList
         $obj = new Supplier();
 
         $obj->fromArray($data);
-        \Closure::bind(function () use ($client): void {
+        (\Closure::bind(function () use ($client): void {
             $this->client = $client;
-        }, $obj, Subject::class);
+        }, $obj, Subject::class))();
 
         return $obj;
     }

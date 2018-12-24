@@ -14,9 +14,9 @@ final class CustomerList extends AbstractList
         $obj = new Customer();
 
         $obj->fromArray($data);
-        \Closure::bind(function () use ($client): void {
+        (\Closure::bind(function () use ($client): void {
             $this->client = $client;
-        }, $obj, Subject::class);
+        }, $obj, Subject::class))();
 
         return $obj;
     }
