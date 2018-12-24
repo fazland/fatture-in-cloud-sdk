@@ -388,7 +388,9 @@ abstract class Document implements \JsonSerializable
         }
 
         $accessor = function & () use ($name, $value) {
-            return $this->$name = $value;
+            $this->$name = $value;
+
+            return $this->$name;
         };
         $return = & $accessor();
 
