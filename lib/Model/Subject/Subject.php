@@ -270,6 +270,7 @@ abstract class Subject implements \JsonSerializable
         if (0 === count($update)) {
             return $this;
         }
+        $update['id'] = $this->id;
 
         $path = ($this instanceof Supplier ? 'fornitori' : 'clienti').'/modifica';
         $this->client->request('POST', $path, $update);
