@@ -20,7 +20,7 @@ abstract class Subject implements \JsonSerializable
      *
      * @var string
      */
-    public $id;
+    private $id;
 
     /**
      * Subject name.
@@ -119,6 +119,9 @@ abstract class Subject implements \JsonSerializable
     public function __get($name)
     {
         switch ($name) {
+            case 'id':
+                return $this->id ? $this->id : null;
+
             case 'phone':
                 return $this->phone ?
                     PhoneNumberUtil::getInstance()->format($this->phone, PhoneNumberFormat::E164) :
@@ -140,6 +143,10 @@ abstract class Subject implements \JsonSerializable
     public function & __set($name, $value)
     {
         switch ($name) {
+            case 'id':
+                $value = $value ? $value : null;
+                break;
+
             case 'phone':
                 $value = $value ?
                     PhoneNumberUtil::getInstance()->parse($value, 'IT') :
@@ -309,7 +316,7 @@ abstract class Subject implements \JsonSerializable
         $this->originalData = $data;
         \ksort($this->originalData);
 
-        $this->id = $data['id'] ?? null;
+        $this->__set('id', $data['id'] ?? null);
         $this->name = $data['nome'] ?? null;
         $this->reference = $data['referente'] ?? null;
         $this->country = $data['paese'] ?? null;
