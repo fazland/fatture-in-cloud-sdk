@@ -120,7 +120,7 @@ abstract class Subject implements \JsonSerializable
     {
         switch ($name) {
             case 'id':
-                return $this->id ? $this->id : null;
+                return $this->id;
 
             case 'phone':
                 return $this->phone ?
@@ -143,10 +143,6 @@ abstract class Subject implements \JsonSerializable
     public function & __set($name, $value)
     {
         switch ($name) {
-            case 'id':
-                $value = $value ? $value : null;
-                break;
-
             case 'phone':
                 $value = $value ?
                     PhoneNumberUtil::getInstance()->parse($value, 'IT') :
@@ -316,7 +312,7 @@ abstract class Subject implements \JsonSerializable
         $this->originalData = $data;
         \ksort($this->originalData);
 
-        $this->__set('id', $data['id'] ?? null);
+        $this->id = $data['id'] ?? null;
         $this->name = $data['nome'] ?? null;
         $this->reference = $data['referente'] ?? null;
         $this->country = $data['paese'] ?? null;
