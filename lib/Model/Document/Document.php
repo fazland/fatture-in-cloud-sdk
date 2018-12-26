@@ -572,13 +572,10 @@ abstract class Document implements \JsonSerializable
         $this->id = $body['id'];
         $this->token = $body['token'];
 
-        if (isset($body['id_cliente'])) {
-            $subject = new Customer();
-            $subject->id = $body['id_cliente'];
-        } else {
-            $subject = new Supplier();
-            $subject->id = $body['id_fornitore'];
-        }
+        $subject = isset($body['id_cliente']) ? new Customer() : new Supplier();
+        (\Closure::bind(function ($id) {
+            $this->id = $id;
+        }, $subject, Subject::class))($body['id_cliente'] ?? $body['id_fornitore']);
 
         $subject->name = $body['nome'];
         $subject->address = new Address();
