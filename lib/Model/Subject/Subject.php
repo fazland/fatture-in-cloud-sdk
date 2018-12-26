@@ -321,7 +321,7 @@ abstract class Subject implements \JsonSerializable
         $this->countryIso = $data['paese_iso'] ?? null;
         $this->mail = $data['mail'] ?? null;
         $this->__set('phone', $data['tel'] ?? null);
-        $this->__set('fax', $data['tel'] ?? null);
+        $this->__set('fax', $data['fax'] ?? null);
         $this->vatNumber = $data['piva'] ?? null;
         $this->fiscalCode = $data['cf'] ?? null;
         $this->extra = $data['extra'] ?? null;
