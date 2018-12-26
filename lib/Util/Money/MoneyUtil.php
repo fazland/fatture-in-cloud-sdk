@@ -28,7 +28,13 @@ final class MoneyUtil
             $amount = $amount->getAmount();
         }
 
-        $currency = $currency ?? new Currency('EUR');
+        if (null === $currency) {
+            throw new \ArgumentCountError(sprintf(
+                'Too few arguments to function %s(), 1 passed, 2 expected.',
+                __METHOD__
+            ));
+        }
+
         $subUnit = self::getCurrencies()->subunitFor($currency);
 
         return new PreciseMoney($amount * (10 ** $subUnit), $currency);
