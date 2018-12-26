@@ -8,6 +8,7 @@ use Fazland\FattureInCloud\Model\Subject\Customer;
 use Fazland\FattureInCloud\Model\Subject\Subject;
 use Fazland\FattureInCloud\Model\Subject\Supplier;
 use Fazland\FattureInCloud\Util\Json;
+use Fazland\FattureInCloud\Util\Money\MoneyUtil;
 use Fazland\FattureInCloud\Util\Money\PreciseMoney;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
@@ -602,18 +603,18 @@ abstract class Document implements \JsonSerializable
         }
 
         $this->vatIncluded = $body['prezzi_ivati'];
-        $this->netAmount = new PreciseMoney($body['importo_netto'] * 100, $this->currency);
-        $this->vatAmount = new PreciseMoney($body['importo_iva'] * 100, $this->currency);
-        $this->grossAmount = new PreciseMoney($body['importo_totale'] * 100, $this->currency);
+        $this->netAmount = MoneyUtil::toMoney($body['importo_netto'], $this->currency);
+        $this->vatAmount = MoneyUtil::toMoney($body['importo_iva'], $this->currency);
+        $this->grossAmount = MoneyUtil::toMoney($body['importo_totale'], $this->currency);
 
         $this->withholdingTaxRatio = $body['rit_acconto'] ?? null;
         $this->withholdingTaxIncome = $body['imponibile_ritenuta'] ?? null;
         $this->withholdingOtherRatio = $body['rit_altra'] ?? null;
 
-        $this->withholdingAmount = isset($body['importo_rit_acconto']) ? new PreciseMoney($body['importo_rit_acconto'] * 100, $this->currency) : null;
-        $this->withholdingOtherAmount = isset($body['importo_rit_altra']) ? new PreciseMoney($body['importo_rit_altra'] * 100, $this->currency) : null;
+        $this->withholdingAmount = isset($body['importo_rit_acconto']) ? MoneyUtil::toMoney($body['importo_rit_acconto'], $this->currency) : null;
+        $this->withholdingOtherAmount = isset($body['importo_rit_altra']) ? MoneyUtil::toMoney($body['importo_rit_altra'], $this->currency) : null;
 
-        $this->stamp = isset($body['marca_bollo']) ? new PreciseMoney($body['marca_bollo'] * 100, $this->currency) : null;
+        $this->stamp = isset($body['marca_bollo']) ? MoneyUtil::toMoney($body['marca_bollo'], $this->currency) : null;
         $this->documentSubject = $body['oggetto_visibile'] ?? null;
         $this->documentInternalSubject = $body['oggetto_interno'] ?? null;
         $this->notes = $body['note'] ?? null;
@@ -672,8 +673,8 @@ abstract class Document implements \JsonSerializable
             $good->qty = $item['quantita'] ?? null;
             $good->description = $item['descrizione'] ?? null;
             $good->category = $item['categoria'] ?? null;
-            $good->netPrice = isset($item['prezzo_netto']) ? new PreciseMoney($item['prezzo_netto'] * 100, $this->currency) : null;
-            $good->grossPrice = isset($item['prezzo_lordo']) ? new PreciseMoney($item['prezzo_lordo'] * 100, $this->currency) : null;
+            $good->netPrice = isset($item['prezzo_netto']) ? MoneyUtil::toMoney($item['prezzo_netto'], $this->currency) : null;
+            $good->grossPrice = isset($item['prezzo_lordo']) ? MoneyUtil::toMoney($item['prezzo_lordo'], $this->currency) : null;
             $good->vatAmount = $item['valore_iva'] ?? null;
             $good->taxable = $item['tassabile'] ?? null;
             $good->discount = $item['sconto'] ?? null;
