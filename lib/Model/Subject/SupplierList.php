@@ -26,6 +26,6 @@ final class SupplierList extends AbstractList
      */
     protected function getType(): string
     {
-        return 'fornitori';
+        return Subject::SUPPLIER;
     }
 }

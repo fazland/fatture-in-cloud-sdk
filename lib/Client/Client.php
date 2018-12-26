@@ -2,6 +2,7 @@
 
 namespace Fazland\FattureInCloud\Client;
 
+use Fazland\FattureInCloud\API\API;
 use Fazland\FattureInCloud\Exception\Request\BadResponseException;
 use Fazland\FattureInCloud\Exception\Request\RequestException;
 use Fazland\FattureInCloud\Util\Json;
@@ -77,6 +78,14 @@ class Client implements ClientInterface
         }
 
         return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function api(): API
+    {
+        return new API($this);
     }
 
     /**

@@ -10,11 +10,15 @@ use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 
 /**
+ * @property string $id
  * @property PhoneNumber $phone
  * @property PhoneNumber $fax
  */
 abstract class Subject implements \JsonSerializable
 {
+    public const SUPPLIER = 'fornitori';
+    public const CUSTOMER = 'clienti';
+
     /**
      * Resource identifier.
      *
@@ -248,13 +252,8 @@ abstract class Subject implements \JsonSerializable
      */
     public function create(ClientInterface $client): self
     {
-        $this->client = $client;
-        $path = ($this instanceof Supplier ? 'fornitori' : 'clienti').'/nuovo';
-
-        $response = $this->client->request('POST', $path, $this);
-
-        $result = Json::decode((string) $response->getBody(), true);
-        $this->id = $result['id'];
+        $api = $this instanceof Supplier ? $client->api()->supplier() : $client->api()->customer();
+        $api->create($this);
 
         return $this;
     }
@@ -275,10 +274,9 @@ abstract class Subject implements \JsonSerializable
         if (0 === count($update)) {
             return $this;
         }
-        $update['id'] = $this->id;
 
-        $path = ($this instanceof Supplier ? 'fornitori' : 'clienti').'/modifica';
-        $this->client->request('POST', $path, $update);
+        $api = $this instanceof Supplier ? $this->client->api()->supplier() : $this->client->api()->customer();
+        $api->update($this->id, $update);
 
         return $this;
     }
@@ -292,12 +290,8 @@ abstract class Subject implements \JsonSerializable
      */
     public function delete(): self
     {
-        $path = ($this instanceof Supplier ? 'fornitori' : 'clienti').'/elimina';
-        $this->client->request('POST', $path, [
-            'id' => $this->id,
-        ]);
-
-        $this->id = null;
+        $api = $this instanceof Supplier ? $this->client->api()->supplier() : $this->client->api()->customer();
+        $api->delete($this);
 
         return $this;
     }

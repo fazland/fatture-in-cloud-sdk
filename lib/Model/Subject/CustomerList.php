@@ -26,6 +26,6 @@ final class CustomerList extends AbstractList
      */
     protected function getType(): string
     {
-        return 'clienti';
+        return Subject::CUSTOMER;
     }
 }
