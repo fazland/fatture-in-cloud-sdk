@@ -2,7 +2,7 @@
 
 namespace Fazland\FattureInCloud\Model\Document;
 
-use Money\Money;
+use Fazland\FattureInCloud\Util\Money\PreciseMoney;
 
 final class Good implements \JsonSerializable
 {
@@ -58,14 +58,14 @@ final class Good implements \JsonSerializable
     /**
      * Net price (mandatory if document vatIncluded is false).
      *
-     * @var Money
+     * @var PreciseMoney
      */
     public $netPrice;
 
     /**
      * Gross price (mandatory if document vatIncluded is true).
      *
-     * @var Money
+     * @var PreciseMoney
      */
     public $grossPrice;
 

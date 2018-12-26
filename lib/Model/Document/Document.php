@@ -8,19 +8,19 @@ use Fazland\FattureInCloud\Model\Subject\Customer;
 use Fazland\FattureInCloud\Model\Subject\Subject;
 use Fazland\FattureInCloud\Model\Subject\Supplier;
 use Fazland\FattureInCloud\Util\Json;
+use Fazland\FattureInCloud\Util\Money\PreciseMoney;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use Money\Currency;
 use Money\CurrencyPair;
-use Money\Money;
 
 /**
  * @property null|EmbeddedTransportDocument $transportDocument
- * @property null|Money $netAmount
- * @property null|Money $vatAmount
- * @property null|Money $grossAmount
- * @property null|Money $withholdingAmount
- * @property null|Money $withholdingOtherAmount
+ * @property null|PreciseMoney $netAmount
+ * @property null|PreciseMoney $vatAmount
+ * @property null|PreciseMoney $grossAmount
+ * @property null|PreciseMoney $withholdingAmount
+ * @property null|PreciseMoney $withholdingOtherAmount
  * @property Links $links
  */
 abstract class Document implements \JsonSerializable
@@ -119,7 +119,7 @@ abstract class Document implements \JsonSerializable
     /**
      * Value of the stamp.
      *
-     * @var Money
+     * @var PreciseMoney
      */
     public $stamp;
 
@@ -266,7 +266,7 @@ abstract class Document implements \JsonSerializable
     /**
      * The net amount of this document.
      *
-     * @var Money
+     * @var PreciseMoney
      */
     private $netAmount;
 
@@ -280,21 +280,21 @@ abstract class Document implements \JsonSerializable
     /**
      * The vat amount of this document.
      *
-     * @var Money
+     * @var PreciseMoney
      */
     private $grossAmount;
 
     /**
      * The withholding tax amount of this document.
      *
-     * @var Money
+     * @var PreciseMoney
      */
     private $withholdingAmount;
 
     /**
      * The withholding other amount of this document.
      *
-     * @var Money
+     * @var PreciseMoney
      */
     private $withholdingOtherAmount;
 
@@ -602,18 +602,18 @@ abstract class Document implements \JsonSerializable
         }
 
         $this->vatIncluded = $body['prezzi_ivati'];
-        $this->netAmount = new Money($body['importo_netto'] * 100, $this->currency);
-        $this->vatAmount = new Money($body['importo_iva'] * 100, $this->currency);
-        $this->grossAmount = new Money($body['importo_totale'] * 100, $this->currency);
+        $this->netAmount = new PreciseMoney($body['importo_netto'] * 100, $this->currency);
+        $this->vatAmount = new PreciseMoney($body['importo_iva'] * 100, $this->currency);
+        $this->grossAmount = new PreciseMoney($body['importo_totale'] * 100, $this->currency);
 
         $this->withholdingTaxRatio = $body['rit_acconto'] ?? null;
         $this->withholdingTaxIncome = $body['imponibile_ritenuta'] ?? null;
         $this->withholdingOtherRatio = $body['rit_altra'] ?? null;
 
-        $this->withholdingAmount = isset($body['importo_rit_acconto']) ? new Money($body['importo_rit_acconto'] * 100, $this->currency) : null;
-        $this->withholdingOtherAmount = isset($body['importo_rit_altra']) ? new Money($body['importo_rit_altra'] * 100, $this->currency) : null;
+        $this->withholdingAmount = isset($body['importo_rit_acconto']) ? new PreciseMoney($body['importo_rit_acconto'] * 100, $this->currency) : null;
+        $this->withholdingOtherAmount = isset($body['importo_rit_altra']) ? new PreciseMoney($body['importo_rit_altra'] * 100, $this->currency) : null;
 
-        $this->stamp = isset($body['marca_bollo']) ? new Money($body['marca_bollo'] * 100, $this->currency) : null;
+        $this->stamp = isset($body['marca_bollo']) ? new PreciseMoney($body['marca_bollo'] * 100, $this->currency) : null;
         $this->documentSubject = $body['oggetto_visibile'] ?? null;
         $this->documentInternalSubject = $body['oggetto_interno'] ?? null;
         $this->notes = $body['note'] ?? null;
@@ -672,8 +672,8 @@ abstract class Document implements \JsonSerializable
             $good->qty = $item['quantita'] ?? null;
             $good->description = $item['descrizione'] ?? null;
             $good->category = $item['categoria'] ?? null;
-            $good->netPrice = isset($item['prezzo_netto']) ? new Money($item['prezzo_netto'] * 100, $this->currency) : null;
-            $good->grossPrice = isset($item['prezzo_lordo']) ? new Money($item['prezzo_lordo'] * 100, $this->currency) : null;
+            $good->netPrice = isset($item['prezzo_netto']) ? new PreciseMoney($item['prezzo_netto'] * 100, $this->currency) : null;
+            $good->grossPrice = isset($item['prezzo_lordo']) ? new PreciseMoney($item['prezzo_lordo'] * 100, $this->currency) : null;
             $good->vatAmount = $item['valore_iva'] ?? null;
             $good->taxable = $item['tassabile'] ?? null;
             $good->discount = $item['sconto'] ?? null;
