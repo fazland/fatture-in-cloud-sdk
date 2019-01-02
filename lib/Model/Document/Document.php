@@ -545,8 +545,8 @@ abstract class Document implements \JsonSerializable
             'PA_beneficiario' => null !== $this->publicAdministration ? $this->publicAdministration->payee : null,
             'extra_anagrafica' => array_filter([
                 'mail' => $this->subject->mail,
-                'tel' => $this->subject->phone ? $phoneUtil->format($this->subject->phone, PhoneNumberFormat::E164) : null,
-                'fax' => $this->subject->fax ? $phoneUtil->format($this->subject->fax, PhoneNumberFormat::E164) : null,
+                'tel' => $this->subject->phone,
+                'fax' => $this->subject->fax,
             ]),
             'split_payment' => $this->splitPayment,
         ] + $address + $payment);
