@@ -489,6 +489,7 @@ abstract class Document implements \JsonSerializable
             'id_fornitore' => $this instanceof SupplierOrder ? $this->subject->id : null,
             'nome' => $this->subject->name,
             'paese' => $this->subject->country,
+            'paese_iso' => $this->subject->countryIso,
             'lingua' => $this->language,
             'piva' => $this->subject->vatNumber,
             'cf' => $this->subject->fiscalCode,
