@@ -10,8 +10,6 @@ use Fazland\FattureInCloud\Model\Subject\Supplier;
 use Fazland\FattureInCloud\Util\Json;
 use Fazland\FattureInCloud\Util\Money\MoneyUtil;
 use Fazland\FattureInCloud\Util\Money\PreciseMoney;
-use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberUtil;
 use Money\Currency;
 use Money\CurrencyPair;
 
@@ -442,14 +440,9 @@ abstract class Document implements \JsonSerializable
      */
     public function create(ClientInterface $client): self
     {
-        $this->client = $client;
-        $path = static::getType().'/nuovo';
-
-        $response = $this->client->request('POST', $path, $this);
-
-        $result = Json::decode((string) $response->getBody(), true);
-        $this->id = $result['new_id'];
-        $this->token = $result['token'];
+        $client->api()
+            ->document(static::getType())
+            ->create($this);
 
         $path = static::getType().'/dettagli';
         $response = $client->request('POST', $path, [
@@ -457,6 +450,30 @@ abstract class Document implements \JsonSerializable
         ]);
 
         $this->fromArray(Json::decode((string) $response->getBody(), true)['dettagli_documento']);
+
+        return $this;
+    }
+
+    /**
+     * Flushes the modifications to the APIs.
+     *
+     * @return $this
+     *
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public function save(): self
+    {
+        $fields = \json_decode(\json_encode($this), true);
+        \ksort($fields);
+
+        $update = \array_map('unserialize', \array_diff_assoc(\array_map('serialize', $fields), \array_map('serialize', $this->originalData)));
+        if (0 === count($update)) {
+            return $this;
+        }
+
+        $this->client->api()
+            ->document(static::getType())
+            ->update($this->token, $update);
 
         return $this;
     }
@@ -481,8 +498,6 @@ abstract class Document implements \JsonSerializable
         if (0 === \count($this->goods)) {
             throw new \RuntimeException('No products added');
         }
-
-        $phoneUtil = PhoneNumberUtil::getInstance();
 
         return array_filter([
             'id_cliente' => $this instanceof SupplierOrder ? null : $this->subject->id,

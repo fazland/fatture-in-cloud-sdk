@@ -25,4 +25,16 @@ final class API extends Resource
     {
         return new Subject($this->client, Model\Subject\Subject::SUPPLIER);
     }
+
+    /**
+     * Gets document API methods.
+     *
+     * @param string $type The document type.
+     *
+     * @return Document
+     */
+    public function document(string $type): Document
+    {
+        return new Document($this->client, $type);
+    }
 }

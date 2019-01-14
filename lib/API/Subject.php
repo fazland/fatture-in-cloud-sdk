@@ -82,7 +82,7 @@ final class Subject extends Resource
     }
 
     /**
-     * Creates a new subject.
+     * Deletes a subject.
      *
      * @param string|Model\Subject\Subject $idOrSubject
      *
