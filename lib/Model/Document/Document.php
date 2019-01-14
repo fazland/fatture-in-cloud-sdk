@@ -585,6 +585,9 @@ abstract class Document implements \JsonSerializable
         $this->autocompleteSubject = false;
         $this->autosaveSubject = false;
 
+        $this->originalData = $body;
+        unset($this->originalData['token']);
+
         $this->id = $body['id'];
         $this->token = $body['token'];
 
