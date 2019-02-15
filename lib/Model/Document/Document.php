@@ -466,6 +466,14 @@ abstract class Document implements \JsonSerializable
         $fields = \json_decode(\json_encode($this), true);
         \ksort($fields);
 
+        foreach (['lista_articoli', 'lista_pagamenti'] as $field) {
+            if (empty($fields[$field])) {
+                continue;
+            }
+
+            $fields[$field] = \array_map('ksort', $fields[$field]);
+        }
+
         $update = \array_map('unserialize', \array_diff_assoc(\array_map('serialize', $fields), \array_map('serialize', $this->originalData)));
         if (0 === count($update)) {
             return $this;
@@ -513,7 +521,7 @@ abstract class Document implements \JsonSerializable
             'numero' => $this->number,
             'data' => null !== $this->date ? $this->date->format('d/m/Y') : null,
             'valuta' => $this->currency->getCode(),
-            'valuta_cambio' => null !== $this->exchangeRatio ? $this->exchangeRatio->getConversionRatio() : null,
+            'valuta_cambio' => null !== $this->exchangeRatio ? \sprintf('%.5f', $this->exchangeRatio->getConversionRatio()) : null,
             'prezzi_ivati' => $this->vatIncluded,
             'rit_acconto' => $this->withholdingTaxRatio,
             'imponibile_ritenuta' => $this->withholdingTaxIncome,
@@ -587,6 +595,14 @@ abstract class Document implements \JsonSerializable
 
         $this->originalData = $body;
         unset($this->originalData['token']);
+
+        foreach (['lista_articoli', 'lista_pagamenti'] as $field) {
+            if (empty($this->originalData[$field])) {
+                continue;
+            }
+
+            $this->originalData[$field] = \array_map('ksort', $this->originalData[$field]);
+        }
 
         $this->id = $body['id'];
         $this->token = $body['token'];
