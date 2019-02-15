@@ -471,7 +471,7 @@ abstract class Document implements \JsonSerializable
                 continue;
             }
 
-            $fields[$field] = \array_map('ksort', $fields[$field]);
+            \array_walk($fields[$field], 'ksort');
         }
 
         $update = \array_map('unserialize', \array_diff_assoc(\array_map('serialize', $fields), \array_map('serialize', $this->originalData)));
@@ -601,7 +601,7 @@ abstract class Document implements \JsonSerializable
                 continue;
             }
 
-            $this->originalData[$field] = \array_map('ksort', $this->originalData[$field]);
+            \array_walk($this->originalData[$field], 'ksort');
         }
 
         $this->id = $body['id'];
