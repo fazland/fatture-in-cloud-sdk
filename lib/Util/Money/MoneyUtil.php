@@ -29,7 +29,7 @@ final class MoneyUtil
         }
 
         if (null === $currency) {
-            throw new \ArgumentCountError(sprintf(
+            throw new \ArgumentCountError(\sprintf(
                 'Too few arguments to function %s(), 1 passed, 2 expected.',
                 __METHOD__
             ));

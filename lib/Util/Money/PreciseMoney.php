@@ -51,8 +51,8 @@ final class PreciseMoney implements \JsonSerializable
     ];
 
     /**
-     * @param int|float|string $amount Amount, expressed in the smallest units of $currency (eg cents)
-     * @param Currency $currency
+     * @param int|float|string $amount   Amount, expressed in the smallest units of $currency (eg cents)
+     * @param Currency         $currency
      *
      * @throws \InvalidArgumentException If amount is not integer
      */
@@ -109,7 +109,7 @@ final class PreciseMoney implements \JsonSerializable
     public function isSameCurrency($other): bool
     {
         if (! $other instanceof Money && ! $other instanceof self) {
-            throw new \TypeError(sprintf(
+            throw new \TypeError(\sprintf(
                 'Argument 1 passed to %s must be of type Money or PreciseMoney. %s passed',
                 __METHOD__,
                 \is_object($other) ? \get_class($other) : \gettype($other)
@@ -128,7 +128,7 @@ final class PreciseMoney implements \JsonSerializable
      */
     private function assertSameCurrency($other): void
     {
-        if (!$this->isSameCurrency($other)) {
+        if (! $this->isSameCurrency($other)) {
             throw new \InvalidArgumentException('Currencies must be identical');
         }
     }
@@ -170,7 +170,7 @@ final class PreciseMoney implements \JsonSerializable
      */
     public function greaterThan($other): bool
     {
-        return $this->compare($other) === 1;
+        return 1 === $this->compare($other);
     }
 
     /**
@@ -192,7 +192,7 @@ final class PreciseMoney implements \JsonSerializable
      */
     public function lessThan($other): bool
     {
-        return $this->compare($other) === -1;
+        return -1 === $this->compare($other);
     }
 
     /**
@@ -265,7 +265,7 @@ final class PreciseMoney implements \JsonSerializable
     private function assertOperand($operand): void
     {
         if (! \is_numeric($operand)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new \InvalidArgumentException(\sprintf(
                 'Operand should be a numeric value, "%s" given.',
                 \is_object($operand) ? \get_class($operand) : \gettype($operand)
             ));
@@ -301,7 +301,7 @@ final class PreciseMoney implements \JsonSerializable
     {
         $this->assertOperand($divisor);
 
-        if ($this->getCalculator()->compare((string) $divisor, '0') === 0) {
+        if (0 === $this->getCalculator()->compare((string) $divisor, '0')) {
             throw new \InvalidArgumentException('Division by zero');
         }
 
@@ -319,13 +319,13 @@ final class PreciseMoney implements \JsonSerializable
      */
     public function allocate(array $ratios): array
     {
-        if (count($ratios) === 0) {
+        if (0 === \count($ratios)) {
             throw new \InvalidArgumentException('Cannot allocate to none, ratios cannot be an empty array');
         }
 
         $remainder = $this->amount;
         $results = [];
-        $total = array_sum($ratios);
+        $total = \array_sum($ratios);
 
         if ($total <= 0) {
             throw new \InvalidArgumentException('Cannot allocate to none, sum of ratios must be greater than zero');
@@ -341,7 +341,7 @@ final class PreciseMoney implements \JsonSerializable
             $remainder = $this->getCalculator()->subtract($remainder, $share);
         }
 
-        for ($i = 0; $this->getCalculator()->compare($remainder, 0) === 1; ++$i) {
+        for ($i = 0; 1 === $this->getCalculator()->compare($remainder, 0); ++$i) {
             $results[$i]->amount = (string) $this->getCalculator()->add($results[$i]->amount, 1);
             $remainder = $this->getCalculator()->subtract($remainder, 1);
         }
@@ -382,7 +382,7 @@ final class PreciseMoney implements \JsonSerializable
      */
     public function isZero(): bool
     {
-        return $this->getCalculator()->compare($this->amount, 0) === 0;
+        return 0 === $this->getCalculator()->compare($this->amount, 0);
     }
 
     /**
@@ -392,7 +392,7 @@ final class PreciseMoney implements \JsonSerializable
      */
     public function isPositive(): bool
     {
-        return $this->getCalculator()->compare($this->amount, 0) === 1;
+        return 1 === $this->getCalculator()->compare($this->amount, 0);
     }
 
     /**
@@ -402,7 +402,7 @@ final class PreciseMoney implements \JsonSerializable
      */
     public function isNegative(): bool
     {
-        return $this->getCalculator()->compare($this->amount, 0) === -1;
+        return -1 === $this->getCalculator()->compare($this->amount, 0);
     }
 
     /**
@@ -423,7 +423,7 @@ final class PreciseMoney implements \JsonSerializable
      */
     public static function registerCalculator($calculator): void
     {
-        if (\is_a($calculator, Calculator::class, true) === false) {
+        if (false === \is_a($calculator, Calculator::class, true)) {
             throw new \InvalidArgumentException('Calculator must implement '.Calculator::class);
         }
 

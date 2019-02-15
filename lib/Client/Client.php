@@ -64,7 +64,7 @@ class Client implements ClientInterface
             if (
                 200 !== $response->getStatusCode() ||
                 empty($contentTypeHeader = $response->getHeader('Content-Type')) ||
-                !\preg_match('#^application/json#', $contentTypeHeader[0])
+                ! \preg_match('#^application/json#', $contentTypeHeader[0])
             ) {
                 throw new BadResponseException($request, $response);
             }

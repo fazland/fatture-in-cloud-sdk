@@ -3,10 +3,10 @@
 namespace Fazland\FattureInCloud\Tests\Util\Money;
 
 use Fazland\FattureInCloud\Util\Money\PreciseMoney;
-use Money\Money;
-use PHPUnit\Framework\TestCase;
 use Money\Calculator;
 use Money\Currency;
+use Money\Money;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -75,11 +75,11 @@ final class PreciseMoneyTest extends TestCase
 
     public function provideValidValueForConstruction(): iterable
     {
-        yield [ 5 ];
-        yield [ '1.5' ];
-        yield [ '5' ];
-        yield [ '5.00' ];
-        yield [ 5.50 ];
+        yield [5];
+        yield ['1.5'];
+        yield ['5'];
+        yield ['5.00'];
+        yield [5.50];
     }
 
     /**
@@ -105,8 +105,8 @@ final class PreciseMoneyTest extends TestCase
 
     public function provideOtherMoney(): iterable
     {
-        yield [ new PreciseMoney(self::AMOUNT, new Currency(self::CURRENCY)) ];
-        yield [ new Money(self::AMOUNT, new Currency(self::CURRENCY)) ];
+        yield [new PreciseMoney(self::AMOUNT, new Currency(self::CURRENCY))];
+        yield [new Money(self::AMOUNT, new Currency(self::CURRENCY))];
     }
 
     /**
@@ -238,27 +238,27 @@ final class PreciseMoneyTest extends TestCase
     {
         $money = new PreciseMoney(100, new Currency(self::CURRENCY));
 
-        $this->calculator->share(Argument::type('numeric'), Argument::type('int'), Argument::type('int'))->will(function($args) {
-            return (int) floor($args[0] * $args[1] / $args[2]);
+        $this->calculator->share(Argument::type('numeric'), Argument::type('int'), Argument::type('int'))->will(function ($args) {
+            return (int) \floor($args[0] * $args[1] / $args[2]);
         });
 
-        $this->calculator->subtract(Argument::type('numeric'), Argument::type('int'))->will(function($args) {
+        $this->calculator->subtract(Argument::type('numeric'), Argument::type('int'))->will(function ($args) {
             return (string) $args[0] - $args[1];
         });
 
-        $this->calculator->add(Argument::type('numeric'), Argument::type('int'))->will(function($args) {
+        $this->calculator->add(Argument::type('numeric'), Argument::type('int'))->will(function ($args) {
             return (string) ($args[0] + $args[1]);
         });
 
-        $this->calculator->compare(Argument::type('numeric'), Argument::type('int'))->will(function($args) {
+        $this->calculator->compare(Argument::type('numeric'), Argument::type('int'))->will(function ($args) {
             return ($args[0] < $args[1]) ? -1 : (($args[0] > $args[1]) ? 1 : 0);
         });
 
-        $this->calculator->absolute(Argument::type('numeric'))->will(function($args) {
-            return ltrim($args[0], '-');
+        $this->calculator->absolute(Argument::type('numeric'))->will(function ($args) {
+            return \ltrim($args[0], '-');
         });
 
-        $this->calculator->multiply(Argument::type('numeric'), Argument::type('int'))->will(function($args) {
+        $this->calculator->multiply(Argument::type('numeric'), Argument::type('int'))->will(function ($args) {
             return (string) $args[0] * $args[1];
         });
 
@@ -271,19 +271,19 @@ final class PreciseMoneyTest extends TestCase
     {
         $money = new PreciseMoney(15, new Currency(self::CURRENCY));
 
-        $this->calculator->share(Argument::type('numeric'), Argument::type('int'), Argument::type('int'))->will(function($args) {
-            return (int) floor($args[0] * $args[1] / $args[2]);
+        $this->calculator->share(Argument::type('numeric'), Argument::type('int'), Argument::type('int'))->will(function ($args) {
+            return (int) \floor($args[0] * $args[1] / $args[2]);
         });
 
-        $this->calculator->subtract(Argument::type('numeric'), Argument::type('int'))->will(function($args) {
+        $this->calculator->subtract(Argument::type('numeric'), Argument::type('int'))->will(function ($args) {
             return $args[0] - $args[1];
         });
 
-        $this->calculator->add(Argument::type('numeric'), Argument::type('int'))->will(function($args) {
+        $this->calculator->add(Argument::type('numeric'), Argument::type('int'))->will(function ($args) {
             return $args[0] + $args[1];
         });
 
-        $this->calculator->compare(Argument::type('numeric'), Argument::type('int'))->will(function($args) {
+        $this->calculator->compare(Argument::type('numeric'), Argument::type('int'))->will(function ($args) {
             return ($args[0] < $args[1]) ? -1 : (($args[0] > $args[1]) ? 1 : 0);
         });
 
@@ -328,7 +328,7 @@ final class PreciseMoneyTest extends TestCase
     {
         $money = new PreciseMoney(1, new Currency(self::CURRENCY));
 
-        $this->calculator->compare(Argument::type('numeric'), Argument::type('int'))->will(function($args) {
+        $this->calculator->compare(Argument::type('numeric'), Argument::type('int'))->will(function ($args) {
             return ($args[0] < $args[1]) ? -1 : (($args[0] > $args[1]) ? 1 : 0);
         });
 

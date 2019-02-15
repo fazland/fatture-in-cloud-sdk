@@ -10,7 +10,7 @@ use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 
 /**
- * @property string $id
+ * @property string      $id
  * @property PhoneNumber $phone
  * @property PhoneNumber $fax
  */
@@ -144,7 +144,7 @@ abstract class Subject implements \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function & __set($name, $value)
+    public function &__set($name, $value)
     {
         switch ($name) {
             case 'phone':
@@ -163,12 +163,12 @@ abstract class Subject implements \JsonSerializable
                 throw new \Error('Undefined property "'.$name.'"');
         }
 
-        $accessor = function & () use ($name, $value) {
+        $accessor = function &() use ($name, $value) {
             $this->$name = $value;
 
             return $this->$name;
         };
-        $return = & $accessor();
+        $return = &$accessor();
 
         return $return;
     }
@@ -212,7 +212,7 @@ abstract class Subject implements \JsonSerializable
     /**
      * Fetches a subject from the API.
      *
-     * @param string $id
+     * @param string          $id
      * @param ClientInterface $client
      *
      * @return Subject
@@ -271,7 +271,7 @@ abstract class Subject implements \JsonSerializable
         \ksort($fields);
 
         $update = \array_map('unserialize', \array_diff_assoc(\array_map('serialize', $fields), \array_map('serialize', $this->originalData)));
-        if (0 === count($update)) {
+        if (0 === \count($update)) {
             return $this;
         }
 

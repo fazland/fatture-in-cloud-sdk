@@ -15,12 +15,12 @@ use Money\CurrencyPair;
 
 /**
  * @property null|EmbeddedTransportDocument $transportDocument
- * @property null|PreciseMoney $netAmount
- * @property null|PreciseMoney $vatAmount
- * @property null|PreciseMoney $grossAmount
- * @property null|PreciseMoney $withholdingAmount
- * @property null|PreciseMoney $withholdingOtherAmount
- * @property Links $links
+ * @property null|PreciseMoney              $netAmount
+ * @property null|PreciseMoney              $vatAmount
+ * @property null|PreciseMoney              $grossAmount
+ * @property null|PreciseMoney              $withholdingAmount
+ * @property null|PreciseMoney              $withholdingOtherAmount
+ * @property Links                          $links
  */
 abstract class Document implements \JsonSerializable
 {
@@ -373,10 +373,10 @@ abstract class Document implements \JsonSerializable
         switch ($name) {
             case 'transportDocument':
                 if (null !== $value && ! $value instanceof EmbeddedTransportDocument) {
-                    throw new \TypeError(sprintf(
+                    throw new \TypeError(\sprintf(
                         'transportDocument must be of type %s or null. %s passed.',
                         EmbeddedTransportDocument::class,
-                        is_object($value) ? get_class($value) : gettype($value)
+                        \is_object($value) ? \get_class($value) : \gettype($value)
                     ));
                 }
 
@@ -386,12 +386,12 @@ abstract class Document implements \JsonSerializable
                 throw new \Error('Undefined property "'.$name.'"');
         }
 
-        $accessor = function & () use ($name, $value) {
+        $accessor = function &() use ($name, $value) {
             $this->$name = $value;
 
             return $this->$name;
         };
-        $return = & $accessor();
+        $return = &$accessor();
 
         return $return;
     }
@@ -407,7 +407,7 @@ abstract class Document implements \JsonSerializable
     /**
      * Gets the document details.
      *
-     * @param string $token
+     * @param string          $token
      * @param ClientInterface $client
      *
      * @return Document
@@ -475,7 +475,7 @@ abstract class Document implements \JsonSerializable
         }
 
         $update = \array_map('unserialize', \array_diff_assoc(\array_map('serialize', $fields), \array_map('serialize', $this->originalData)));
-        if (0 === count($update)) {
+        if (0 === \count($update)) {
             return $this;
         }
 
@@ -487,7 +487,7 @@ abstract class Document implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize(): array
     {
@@ -507,7 +507,7 @@ abstract class Document implements \JsonSerializable
             throw new \RuntimeException('No products added');
         }
 
-        return array_filter([
+        return \array_filter([
             'id_cliente' => $this instanceof SupplierOrder ? null : $this->subject->id,
             'id_fornitore' => $this instanceof SupplierOrder ? $this->subject->id : null,
             'nome' => $this->subject->name,
@@ -567,7 +567,7 @@ abstract class Document implements \JsonSerializable
             'PA_istituto_credito' => null !== $this->publicAdministration ? $this->publicAdministration->creditInstitution : null,
             'PA_iban' => null !== $this->publicAdministration ? $this->publicAdministration->iban : null,
             'PA_beneficiario' => null !== $this->publicAdministration ? $this->publicAdministration->payee : null,
-            'extra_anagrafica' => array_filter([
+            'extra_anagrafica' => \array_filter([
                 'mail' => $this->subject->mail,
                 'tel' => $this->subject->phone,
                 'fax' => $this->subject->fax,

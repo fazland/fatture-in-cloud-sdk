@@ -34,7 +34,7 @@ abstract class AbstractList implements \IteratorAggregate
      */
     public function getIterator()
     {
-        yield from array_values($this->collection);
+        yield from \array_values($this->collection);
 
         $filters = $this->filters;
         $currentPage = $filters['pagina'] ?? 1;

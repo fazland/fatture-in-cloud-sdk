@@ -154,9 +154,9 @@ final class PublicAdministration
         switch ($name) {
             case 'type':
                 if (null !== $value && self::PUBLIC_ENTITY !== $value && self::B2B !== $value) {
-                    throw new \TypeError(sprintf(
+                    throw new \TypeError(\sprintf(
                         'type must be one of %s or null. %s passed.',
-                        implode(', ', [self::PUBLIC_ENTITY, self::B2B]),
+                        \implode(', ', [self::PUBLIC_ENTITY, self::B2B]),
                         (string) $value
                     ));
                 }
@@ -168,9 +168,9 @@ final class PublicAdministration
                     self::DOCUMENT_TYPE_ORDER !== $value && self::DOCUMENT_TYPE_CONTRACT !== $value &&
                     self::DOCUMENT_TYPE_CONVENTION !== $value && self::DOCUMENT_TYPE_ANY !== $value
                 ) {
-                    throw new \TypeError(sprintf(
+                    throw new \TypeError(\sprintf(
                         'type must be one of %s or null. %s passed.',
-                        implode(', ', [self::DOCUMENT_TYPE_ORDER, self::DOCUMENT_TYPE_CONTRACT, self::DOCUMENT_TYPE_CONVENTION, self::DOCUMENT_TYPE_ANY]),
+                        \implode(', ', [self::DOCUMENT_TYPE_ORDER, self::DOCUMENT_TYPE_CONTRACT, self::DOCUMENT_TYPE_CONVENTION, self::DOCUMENT_TYPE_ANY]),
                         (string) $value
                     ));
                 }
@@ -181,19 +181,16 @@ final class PublicAdministration
                 throw new \Error('Undefined property "'.$name.'"');
         }
 
-        $accessor = function & () use ($name, $value) {
+        $accessor = function &() use ($name, $value) {
             $this->$name = $value;
 
             return $this->$name;
         };
-        $return = & $accessor();
+        $return = &$accessor();
 
         return $return;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __isset($name): bool
     {
         return isset($this->$name);

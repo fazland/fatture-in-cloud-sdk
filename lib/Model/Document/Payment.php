@@ -35,7 +35,7 @@ final class Payment implements \JsonSerializable
     public $settlementDate;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize(): array
     {

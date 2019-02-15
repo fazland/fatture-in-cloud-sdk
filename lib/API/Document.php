@@ -43,7 +43,7 @@ final class Document extends Resource
     /**
      * Updates a subject.
      *
-     * @param string $token
+     * @param string                      $token
      * @param array|Model\Subject\Subject $update
      *
      * @throws \Psr\Http\Client\ClientExceptionInterface
@@ -66,7 +66,7 @@ final class Document extends Resource
     }
 
     /**
-     * Deletes a document
+     * Deletes a document.
      *
      * @param string|Model\Document\Document $tokenOrDocument
      *
@@ -76,7 +76,7 @@ final class Document extends Resource
     {
         $path = $this->type.'/elimina';
         $this->client->request('POST', $path, [
-            'token' => $tokenOrDocument instanceof Model\Document\Document ? $tokenOrDocument->token : $tokenOrDocument
+            'token' => $tokenOrDocument instanceof Model\Document\Document ? $tokenOrDocument->token : $tokenOrDocument,
         ]);
 
         if ($tokenOrDocument instanceof Model\Document\Document) {

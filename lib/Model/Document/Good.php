@@ -132,7 +132,7 @@ final class Good implements \JsonSerializable
     public $fromWarehouse;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize(): array
     {

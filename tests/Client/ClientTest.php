@@ -50,7 +50,7 @@ class ClientTest extends TestCase
         $this->http->sendRequest(Argument::that(function (RequestInterface $arg): bool {
             self::assertJsonStringEqualsJsonString(\json_encode([
                 'api_uid' => 'uid',
-                'api_key' => 'key'
+                'api_key' => 'key',
             ]), (string) $arg->getBody());
             self::assertEquals('application/json', $arg->getHeader('Content-Type')[0] ?? '');
             self::assertEquals('application/json', $arg->getHeader('Accept')[0] ?? '');
@@ -61,9 +61,9 @@ class ClientTest extends TestCase
 
     public function provideInvalidResponses(): iterable
     {
-        yield [ new Response(500, ['Content-Type' => 'application/json'], '{}') ];
-        yield [ new Response(200, ['Content-Type' => 'text/html'], 'HTML here') ];
-        yield [ new Response(200, [], '{}') ];
+        yield [new Response(500, ['Content-Type' => 'application/json'], '{}')];
+        yield [new Response(200, ['Content-Type' => 'text/html'], 'HTML here')];
+        yield [new Response(200, [], '{}')];
     }
 
     /**
@@ -78,17 +78,17 @@ class ClientTest extends TestCase
 
     public function provideErrorCodes(): iterable
     {
-        yield [ 1000, UnauthorizedException::class ];
-        yield [ 1001, MandatoryParameterMissingException::class ];
-        yield [ 1100, BadRequestException::class ];
-        yield [ 2000, LicenseExpiredException::class ];
-        yield [ 2002, RateLimitExceededException::class ];
-        yield [ 2004, BlockedException::class ];
-        yield [ 2005, LicensePlanInsufficient::class ];
-        yield [ 2006, ForbiddenException::class ];
-        yield [ 4000, NotFoundException::class ];
-        yield [ 4001, LimitExceededException::class ];
-        yield [ 5000, IncorrectDataException::class ];
+        yield [1000, UnauthorizedException::class];
+        yield [1001, MandatoryParameterMissingException::class];
+        yield [1100, BadRequestException::class];
+        yield [2000, LicenseExpiredException::class];
+        yield [2002, RateLimitExceededException::class];
+        yield [2004, BlockedException::class];
+        yield [2005, LicensePlanInsufficient::class];
+        yield [2006, ForbiddenException::class];
+        yield [4000, NotFoundException::class];
+        yield [4001, LimitExceededException::class];
+        yield [5000, IncorrectDataException::class];
     }
 
     /**

@@ -11,12 +11,12 @@ class JsonTest extends TestCase
     {
         self::assertEquals((object) [
             'test' => 'foo',
-            'bar' => 12.0
+            'bar' => 12.0,
         ], Json::decode('{"test":"foo","bar":12.0}'));
 
         self::assertEquals([
             'test' => 'foo',
-            'bar' => 12.0
+            'bar' => 12.0,
         ], Json::decode('{"test":"foo","bar":12.0}', true));
     }
 

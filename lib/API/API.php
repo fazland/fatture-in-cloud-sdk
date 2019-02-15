@@ -29,7 +29,7 @@ final class API extends Resource
     /**
      * Gets document API methods.
      *
-     * @param string $type The document type.
+     * @param string $type The document type
      *
      * @return Document
      */

@@ -59,7 +59,7 @@ final class Subject extends Resource
     /**
      * Updates a subject.
      *
-     * @param int|string $id
+     * @param int|string                  $id
      * @param array|Model\Subject\Subject $update
      *
      * @throws \Psr\Http\Client\ClientExceptionInterface
@@ -92,7 +92,7 @@ final class Subject extends Resource
     {
         $path = $this->type.'/elimina';
         $this->client->request('POST', $path, [
-            'id' => $idOrSubject instanceof Model\Subject\Subject ? $idOrSubject->id : $idOrSubject
+            'id' => $idOrSubject instanceof Model\Subject\Subject ? $idOrSubject->id : $idOrSubject,
         ]);
 
         if ($idOrSubject instanceof Model\Subject\Subject) {

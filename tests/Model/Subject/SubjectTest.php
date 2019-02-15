@@ -22,7 +22,7 @@ class SubjectTest extends TestCase
      */
     public function testSetShouldNotEmitNotices(): void
     {
-        set_error_handler(function (int $errno, string $errstr) {
+        \set_error_handler(function (int $errno, string $errstr) {
             throw new \Exception($errstr);
         }, E_ALL | E_STRICT);
 
@@ -30,7 +30,7 @@ class SubjectTest extends TestCase
             $this->subject->phone = '+393332223456';
             $this->subject->fax = '+393332223456';
         } finally {
-            restore_error_handler();
+            \restore_error_handler();
         }
     }
 

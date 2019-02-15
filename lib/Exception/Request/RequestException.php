@@ -19,7 +19,7 @@ class RequestException extends \RuntimeException
 
     public function __construct(RequestInterface $request, ResponseInterface $response)
     {
-        $body = json_decode((string) $response->getBody());
+        $body = \json_decode((string) $response->getBody());
         parent::__construct('Error while executing request: '.($body->error ?? $response->getReasonPhrase() ?: 'Unknown error'));
 
         $this->request = $request;
@@ -36,7 +36,7 @@ class RequestException extends \RuntimeException
      */
     public static function create(RequestInterface $request, ResponseInterface $response): self
     {
-        $body = json_decode((string) $response->getBody());
+        $body = \json_decode((string) $response->getBody());
         switch ($body->error_code) {
             case 1000:
                 $class = UnauthorizedException::class;
