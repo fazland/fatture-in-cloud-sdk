@@ -555,7 +555,7 @@ abstract class Document implements \JsonSerializable
             'PA' => null !== $this->publicAdministration,
             'PA_tipo_cliente' => null !== $this->publicAdministration ? $this->publicAdministration->type : null,
             'PA_tipo' => null !== $this->publicAdministration ? $this->publicAdministration->documentType : null,
-                'PA_numero' => null !== $this->publicAdministration ? $this->publicAdministration->documentNumber : null,
+            'PA_numero' => null !== $this->publicAdministration ? $this->publicAdministration->documentNumber : null,
             'PA_data' => null !== $this->publicAdministration && null !== $this->publicAdministration->date ?
                 $this->publicAdministration->date->format('d/m/Y') : null,
             'PA_cup' => null !== $this->publicAdministration ? $this->publicAdministration->cup : null,
@@ -602,7 +602,17 @@ abstract class Document implements \JsonSerializable
             }
 
             \array_walk($this->originalData[$field], 'ksort');
+            $this->originalData[$field] = array_map(function (array $element): array {
+                return array_filter($element, function ($value): bool {
+                    return null !== $value && '' !== $value;
+                });
+            }, $this->originalData[$field]);
         }
+
+        foreach ($this->originalData['lista_articoli'] as &$good) {
+            unset($good['valore_iva']);
+        }
+        unset($good);
 
         $this->id = $body['id'];
         $this->token = $body['token'];
