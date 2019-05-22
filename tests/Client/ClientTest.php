@@ -4,6 +4,7 @@ namespace Fazland\FattureInCloud\Tests\Client;
 
 use Fazland\FattureInCloud\Client\Client;
 use Fazland\FattureInCloud\Exception\Request\BadRequestException;
+use Fazland\FattureInCloud\Exception\Request\BadResponseException;
 use Fazland\FattureInCloud\Exception\Request\BlockedException;
 use Fazland\FattureInCloud\Exception\Request\ForbiddenException;
 use Fazland\FattureInCloud\Exception\Request\IncorrectDataException;
@@ -68,10 +69,10 @@ class ClientTest extends TestCase
 
     /**
      * @dataProvider provideInvalidResponses
-     * @expectedException \Fazland\FattureInCloud\Exception\Request\BadResponseException
      */
     public function testRequestShouldThrowIfResponseIsInvalid(ResponseInterface $response): void
     {
+        $this->expectException(BadResponseException::class);
         $this->http->sendRequest(Argument::any())->willReturn($response);
         $this->client->request('POST', '/', '{}');
     }

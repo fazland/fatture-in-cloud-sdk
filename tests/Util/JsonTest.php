@@ -2,6 +2,7 @@
 
 namespace Fazland\FattureInCloud\Tests\Util;
 
+use Fazland\FattureInCloud\Exception\InvalidJSONException;
 use Fazland\FattureInCloud\Util\Json;
 use PHPUnit\Framework\TestCase;
 
@@ -20,11 +21,9 @@ class JsonTest extends TestCase
         ], Json::decode('{"test":"foo","bar":12.0}', true));
     }
 
-    /**
-     * @expectedException \Fazland\FattureInCloud\Exception\InvalidJSONException
-     */
     public function testDecodeShouldThrowIfJsonIsInvalid(): void
     {
+        $this->expectException(InvalidJSONException::class);
         Json::decode('test_x{', false);
     }
 }

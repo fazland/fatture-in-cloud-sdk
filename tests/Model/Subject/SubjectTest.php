@@ -12,7 +12,7 @@ class SubjectTest extends TestCase
      */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = $this->createSubject();
     }
