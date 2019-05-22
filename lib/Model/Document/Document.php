@@ -137,6 +137,20 @@ abstract class Document implements \JsonSerializable
     public $documentInternalSubject;
 
     /**
+     * Name of the revenue center.
+     *
+     * @var string
+     */
+    public $revenueCenter;
+
+    /**
+     * Name of the cost center.
+     *
+     * @var string
+     */
+    public $costCenter;
+
+    /**
      * Notes (in HTML).
      *
      * @var string
@@ -529,6 +543,8 @@ abstract class Document implements \JsonSerializable
             'marca_bollo' => null !== $this->stamp ? (float) $this->stamp->getAmount() : null,
             'oggetto_visibile' => $this->documentSubject,
             'oggetto_interno' => $this->documentInternalSubject,
+            'centro_ricavo' => $this->revenueCenter,
+            'centro_costo' => $this->costCenter,
             'note' => $this->notes,
             'nascondi_scadenza' => $this->hideExpiration,
             'ddt' => null !== $this->transportDocument,
@@ -659,6 +675,8 @@ abstract class Document implements \JsonSerializable
         $this->stamp = isset($body['marca_bollo']) ? MoneyUtil::toMoney($body['marca_bollo'], $this->currency) : null;
         $this->documentSubject = $body['oggetto_visibile'] ?? null;
         $this->documentInternalSubject = $body['oggetto_interno'] ?? null;
+        $this->revenueCenter = $body['centro_ricavo'] ?? null;
+        $this->costCenter = $body['centro_costo'] ?? null;
         $this->notes = $body['note'] ?? null;
         $this->hideExpiration = $body['nascondi_scadenza'] ?? null;
 
