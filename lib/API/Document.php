@@ -61,7 +61,7 @@ final class Document extends Resource
             (\Closure::bind(function ($token, $client): void {
                 $this->token = $token;
                 $this->client = $client;
-            }, $update, Subject::class))($token, $this->client);
+            }, $update, Model\Subject\Subject::class))($token, $this->client);
         }
     }
 
@@ -83,7 +83,7 @@ final class Document extends Resource
             (\Closure::bind(function (): void {
                 $this->id = null;
                 $this->client = null;
-            }, $tokenOrDocument, Subject::class))();
+            }, $tokenOrDocument, Model\Subject\Subject::class))();
         }
     }
 }

@@ -45,15 +45,13 @@ final class Subject extends Resource
      */
     public function create(Model\Subject\Subject $subject): void
     {
-        $path = $this->type.'/nuovo';
-
-        $response = $this->client->request('POST', $path, $subject);
+        $response = $this->client->request('POST', $path = $this->type.'/nuovo', $subject);
 
         $result = Json::decode((string) $response->getBody(), true);
         (\Closure::bind(function ($id, $client): void {
             $this->id = $id;
             $this->client = $client;
-        }, $subject, Subject::class))($result['id'], $this->client);
+        }, $subject, Model\Subject\Subject::class))($result['id'], $this->client);
     }
 
     /**
@@ -77,7 +75,7 @@ final class Subject extends Resource
             (\Closure::bind(function ($id, $client): void {
                 $this->id = $id;
                 $this->client = $client;
-            }, $update, Subject::class))($id, $this->client);
+            }, $update, Model\Subject\Subject::class))($id, $this->client);
         }
     }
 
@@ -99,7 +97,7 @@ final class Subject extends Resource
             (\Closure::bind(function (): void {
                 $this->id = null;
                 $this->client = null;
-            }, $idOrSubject, Subject::class))();
+            }, $idOrSubject, Model\Subject\Subject::class))();
         }
     }
 }
