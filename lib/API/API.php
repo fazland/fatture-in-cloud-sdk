@@ -37,4 +37,14 @@ final class API extends Resource
     {
         return new Document($this->client, $type);
     }
+
+    /**
+     * Gets good API methods.
+     *
+     * @return Good
+     */
+    public function good(): Good
+    {
+        return new Good($this->client);
+    }
 }

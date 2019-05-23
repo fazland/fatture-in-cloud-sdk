@@ -138,11 +138,11 @@ final class Good implements \JsonSerializable
     {
         return \array_filter([
             'id' => $this->id,
-            'codice' => $this->code,
+            'cod' => $this->code,
             'nome' => $this->name,
             'um' => $this->mu,
             'quantita' => $this->qty,
-            'descrizione' => $this->description,
+            'desc' => $this->description,
             'categoria' => $this->category,
             'prezzo_netto' => null !== $this->netPrice ? \sprintf('%.5f', $this->netPrice->getAmount() / 100.0) : null,
             'prezzo_lordo' => null !== $this->grossPrice ? \sprintf('%.5f', $this->grossPrice->getAmount() / 100.0) : null,
