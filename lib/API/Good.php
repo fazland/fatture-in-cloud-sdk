@@ -55,7 +55,7 @@ final class Good extends Resource
         if ($update instanceof Model\Document\Good) {
             (\Closure::bind(function ($id): void {
                 $this->id = $id;
-            }, $update, Model\Document\Good::class))($id, $this->client);
+            }, $update, Model\Document\Good::class))($id);
         }
     }
 
