@@ -142,7 +142,7 @@ final class Good implements \JsonSerializable
             'nome' => $this->name,
             'um' => $this->mu,
             'quantita' => $this->qty,
-            'desc' => $this->description,
+            'descrizione' => $this->description,
             'categoria' => $this->category,
             'prezzo_netto' => null !== $this->netPrice ? \sprintf('%.5f', $this->netPrice->getAmount() / 100.0) : null,
             'prezzo_lordo' => null !== $this->grossPrice ? \sprintf('%.5f', $this->grossPrice->getAmount() / 100.0) : null,
@@ -154,7 +154,7 @@ final class Good implements \JsonSerializable
             'sconto_rosso' => $this->highlightDiscount,
             'in_ddt' => $this->inTransportDocument,
             'magazzino' => $this->fromWarehouse,
-        ], function ($value): bool {
+        ], static function ($value): bool {
             return null !== $value && '' !== $value;
         });
     }

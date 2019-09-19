@@ -44,11 +44,12 @@ class ClientTest extends TestCase
     public function testRequestShouldAppendUidKeyAndCorrectHeaders(): void
     {
         $this->http->sendRequest(Argument::any())
-            ->willReturn(new Response(200, ['Content-Type' => 'application/json'], '{"ok":1}'));
+            ->willReturn(new Response(200, ['Content-Type' => 'application/json'], '{"ok":1}'))
+        ;
 
         $this->client->request('POST', '/', '{}');
 
-        $this->http->sendRequest(Argument::that(function (RequestInterface $arg): bool {
+        $this->http->sendRequest(Argument::that(static function (RequestInterface $arg): bool {
             self::assertJsonStringEqualsJsonString(\json_encode([
                 'api_uid' => 'uid',
                 'api_key' => 'key',
@@ -104,7 +105,8 @@ class ClientTest extends TestCase
             'error_code' => $errorCode,
         ];
         $this->http->sendRequest(Argument::any())
-            ->willReturn(new Response(200, ['Content-Type' => 'application/json'], \json_encode($body)));
+            ->willReturn(new Response(200, ['Content-Type' => 'application/json'], \json_encode($body)))
+        ;
 
         $this->client->request('POST', '/', '{}');
     }

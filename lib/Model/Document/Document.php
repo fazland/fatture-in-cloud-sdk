@@ -14,12 +14,12 @@ use Money\Currency;
 use Money\CurrencyPair;
 
 /**
- * @property null|EmbeddedTransportDocument $transportDocument
- * @property null|PreciseMoney              $netAmount
- * @property null|PreciseMoney              $vatAmount
- * @property null|PreciseMoney              $grossAmount
- * @property null|PreciseMoney              $withholdingAmount
- * @property null|PreciseMoney              $withholdingOtherAmount
+ * @property EmbeddedTransportDocument|null $transportDocument
+ * @property PreciseMoney|null              $netAmount
+ * @property PreciseMoney|null              $vatAmount
+ * @property PreciseMoney|null              $grossAmount
+ * @property PreciseMoney|null              $withholdingAmount
+ * @property PreciseMoney|null              $withholdingOtherAmount
  * @property Links                          $links
  */
 abstract class Document implements \JsonSerializable
@@ -181,7 +181,7 @@ abstract class Document implements \JsonSerializable
     /**
      * Transport document embedded of this document.
      *
-     * @var null|EmbeddedTransportDocument
+     * @var EmbeddedTransportDocument|null
      */
     private $transportDocument;
 
@@ -456,7 +456,8 @@ abstract class Document implements \JsonSerializable
     {
         $client->api()
             ->document(static::getType())
-            ->create($this);
+            ->create($this)
+        ;
 
         $path = static::getType().'/dettagli';
         $response = $client->request('POST', $path, [
@@ -495,7 +496,8 @@ abstract class Document implements \JsonSerializable
 
         $this->client->api()
             ->document(static::getType())
-            ->update($this->token, $update);
+            ->update($this->token, $update)
+        ;
 
         return $this;
     }
@@ -511,7 +513,9 @@ abstract class Document implements \JsonSerializable
 
         $address = $this->subject->address->jsonSerialize();
         $address = \array_combine(
-            \array_map(function (string $key): string { return 'indirizzo_'.$key; }, \array_keys($address)),
+            \array_map(static function (string $key): string {
+                return 'indirizzo_'.$key;
+            }, \array_keys($address)),
             \array_values($address)
         );
 
@@ -618,8 +622,8 @@ abstract class Document implements \JsonSerializable
             }
 
             \array_walk($this->originalData[$field], 'ksort');
-            $this->originalData[$field] = array_map(function (array $element): array {
-                return array_filter($element, function ($value): bool {
+            $this->originalData[$field] = \array_map(static function (array $element): array {
+                return \array_filter($element, static function ($value): bool {
                     return null !== $value && '' !== $value;
                 });
             }, $this->originalData[$field]);

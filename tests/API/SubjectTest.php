@@ -31,7 +31,8 @@ class SubjectTest extends TestCase
     {
         $subject = new ConcreteSubject();
         $this->client->request('POST', 'foo/nuovo', $subject)
-            ->willReturn($response = $this->prophesize(ResponseInterface::class));
+            ->willReturn($response = $this->prophesize(ResponseInterface::class))
+        ;
 
         $response->getBody()->willReturn(stream_for(\json_encode([
             'id' => 'foobar_id',

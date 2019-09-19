@@ -22,7 +22,7 @@ class SubjectTest extends TestCase
      */
     public function testSetShouldNotEmitNotices(): void
     {
-        \set_error_handler(function (int $errno, string $errstr) {
+        \set_error_handler(static function (int $errno, string $errstr) {
             throw new \Exception($errstr);
         }, E_ALL | E_STRICT);
 

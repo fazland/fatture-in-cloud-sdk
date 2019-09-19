@@ -188,7 +188,9 @@ abstract class Subject implements \JsonSerializable
     {
         $address = $this->address->jsonSerialize();
         $address = \array_combine(
-            \array_map(function (string $key): string { return 'indirizzo_'.$key; }, \array_keys($address)),
+            \array_map(static function (string $key): string {
+                return 'indirizzo_'.$key;
+            }, \array_keys($address)),
             \array_values($address)
         );
 
