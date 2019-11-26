@@ -20,7 +20,7 @@
         "monolog/monolog": "^1.24",
         "php-http/guzzle6-adapter": "^2.0",
         "phpunit/phpunit": "^7.5",
-        "symfony/cache": "^4.1"
+        "symfony/cache": "^4.1|^5.0"
     },
     "license": "MIT",
     "authors": [
