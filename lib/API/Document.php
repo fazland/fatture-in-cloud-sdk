@@ -21,6 +21,39 @@ final class Document extends Resource
     }
 
     /**
+     * @param array $filter
+     *
+     * @return Model\Document\AbstractList
+     *
+     * @throws \Exception
+     */
+    public function list(array $filter = []): Model\Document\AbstractList
+    {
+        switch ($this->type) {
+            case Model\Document\Document::INVOICE:
+                return new Model\Document\InvoiceList($this->client, $filter);
+            case Model\Document\Document::PROFORMA:
+                return new Model\Document\ProformaList($this->client, $filter);
+            case Model\Document\Document::ORDER:
+                return new Model\Document\OrderList($this->client, $filter);
+            case Model\Document\Document::QUOTATION:
+                return new Model\Document\QuotationList($this->client, $filter);
+            case Model\Document\Document::RECEIPT:
+                return new Model\Document\ReceiptList($this->client, $filter);
+            case Model\Document\Document::CREDITNOTE:
+                return new Model\Document\CreditNoteList($this->client, $filter);
+            case Model\Document\Document::REPORT:
+                return new Model\Document\ReportList($this->client, $filter);
+            case Model\Document\Document::SUPPLIERORDER:
+                return new Model\Document\SupplierOrderList($this->client, $filter);
+            case Model\Document\Document::TRANSPORTDOCUMENT:
+                return new Model\Document\TransportDocumentList($this->client, $filter);
+        }
+
+        throw new \Exception(sprintf('the type %s does not exist', $this->type));
+    }
+
+    /**
      * Creates a new document.
      *
      * @param Model\Document\Document $document

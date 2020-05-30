@@ -28,6 +28,16 @@ abstract class Document implements \JsonSerializable
     public const TOTALS_SHOW_NETS = 'netti';
     public const TOTALS_HIDE_ALL = 'nessuno';
 
+    public const INVOICE = 'fatture';
+    public const PROFORMA = 'proforma';
+    public const ORDER = 'ordini';
+    public const QUOTATION = 'preventivi';
+    public const RECEIPT = 'ricevute';
+    public const REPORT = 'rapporti';
+    public const CREDITNOTE = 'ndc';
+    public const SUPPLIERORDER = 'ordforn';
+    public const TRANSPORTDOCUMENT = 'ddt';
+
     /**
      * Document identifier.
      *
@@ -41,6 +51,11 @@ abstract class Document implements \JsonSerializable
      * @var string
      */
     public $token;
+
+    /**
+     * @var string
+     */
+    public $name;
 
     /**
      * Customer or supplier.
@@ -540,7 +555,7 @@ abstract class Document implements \JsonSerializable
             'data' => null !== $this->date ? $this->date->format('d/m/Y') : null,
             'valuta' => $this->currency->getCode(),
             'valuta_cambio' => null !== $this->exchangeRatio ? \sprintf('%.5f', $this->exchangeRatio->getConversionRatio()) : null,
-            'prezzi_ivati' => $this->vatIncluded,
+            'prezzi_ivati' => $this->vatIncluded ?? null,
             'rit_acconto' => $this->withholdingTaxRatio,
             'imponibile_ritenuta' => $this->withholdingTaxIncome,
             'rit_altra' => $this->withholdingOtherRatio,
@@ -608,7 +623,7 @@ abstract class Document implements \JsonSerializable
      *
      * @param array $body
      */
-    protected function fromArray(array $body): void
+    public function fromArray(array $body): void
     {
         $this->autocompleteSubject = false;
         $this->autosaveSubject = false;
@@ -629,29 +644,32 @@ abstract class Document implements \JsonSerializable
             }, $this->originalData[$field]);
         }
 
-        foreach ($this->originalData['lista_articoli'] as &$good) {
-            unset($good['valore_iva']);
+        if (isset($this->originalData['lista_articoli'])) {
+            foreach ($this->originalData['lista_articoli'] as &$good) {
+                unset($good['valore_iva']);
+            }
+            unset($good);
         }
-        unset($good);
 
         $this->id = $body['id'];
         $this->token = $body['token'];
+        $this->name = $body['nome'] ?? null;
 
         $subject = isset($body['id_cliente']) ? new Customer() : new Supplier();
         (\Closure::bind(function ($id) {
             $this->id = $id;
-        }, $subject, Subject::class))($body['id_cliente'] ?? $body['id_fornitore']);
+        }, $subject, Subject::class))($body['id_cliente'] ?? $body['id_fornitore'] ?? null);
 
         $subject->name = $body['nome'];
         $subject->address = new Address();
-        $subject->address->street = $body['indirizzo_via'];
-        $subject->address->zip = $body['indirizzo_cap'];
-        $subject->address->city = $body['indirizzo_citta'];
-        $subject->address->province = $body['indirizzo_provincia'];
+        $subject->address->street = $body['indirizzo_via'] ?? null;
+        $subject->address->zip = $body['indirizzo_cap'] ?? null;
+        $subject->address->city = $body['indirizzo_citta'] ?? null;
+        $subject->address->province = $body['indirizzo_provincia'] ?? null;
         $subject->address->extra = $body['indirizzo_extra'] ?? null;
-        $subject->country = $body['paese'];
-        $subject->vatNumber = $body['piva'];
-        $subject->fiscalCode = $body['cf'];
+        $subject->country = $body['paese'] ?? null;
+        $subject->vatNumber = $body['piva'] ?? null;
+        $subject->fiscalCode = $body['cf'] ?? null;
 
         $this->subject = $subject;
 
@@ -664,9 +682,9 @@ abstract class Document implements \JsonSerializable
             $this->exchangeRatio = new CurrencyPair(new Currency('EUR'), new Currency($body['valuta']), $body['valuta_cambio']);
         }
 
-        $this->vatIncluded = $body['prezzi_ivati'];
-        $this->netAmount = MoneyUtil::toMoney($body['importo_netto'], $this->currency);
-        $this->vatAmount = MoneyUtil::toMoney($body['importo_iva'], $this->currency);
+        $this->vatIncluded = $body['prezzi_ivati'] ?? null;
+        $this->netAmount = isset($body['importo_netto']) ? MoneyUtil::toMoney($body['importo_netto'], $this->currency) : null;
+        $this->vatAmount = isset($body['importo_iva']) ? MoneyUtil::toMoney($body['importo_iva'], $this->currency) : null;
         $this->grossAmount = MoneyUtil::toMoney($body['importo_totale'], $this->currency);
 
         $this->withholdingTaxRatio = $body['rit_acconto'] ?? null;
