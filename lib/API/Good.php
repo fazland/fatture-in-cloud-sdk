@@ -21,8 +21,6 @@ final class Good extends Resource
     /**
      * Creates a new good.
      *
-     * @param Model\Document\Good $good
-     *
      * @throws \Psr\Http\Client\ClientExceptionInterface
      */
     public function create(Model\Document\Good $good): void

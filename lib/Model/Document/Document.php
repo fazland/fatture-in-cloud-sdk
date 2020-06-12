@@ -402,11 +402,7 @@ abstract class Document implements \JsonSerializable
         switch ($name) {
             case 'transportDocument':
                 if (null !== $value && ! $value instanceof EmbeddedTransportDocument) {
-                    throw new \TypeError(\sprintf(
-                        'transportDocument must be of type %s or null. %s passed.',
-                        EmbeddedTransportDocument::class,
-                        \is_object($value) ? \get_class($value) : \gettype($value)
-                    ));
+                    throw new \TypeError(\sprintf('transportDocument must be of type %s or null. %s passed.', EmbeddedTransportDocument::class, \is_object($value) ? \get_class($value) : \gettype($value)));
                 }
 
                 break;
@@ -436,9 +432,6 @@ abstract class Document implements \JsonSerializable
     /**
      * Gets the document details.
      *
-     * @param string          $token
-     * @param ClientInterface $client
-     *
      * @return Document
      */
     public static function get(string $token, ClientInterface $client): self
@@ -460,10 +453,6 @@ abstract class Document implements \JsonSerializable
 
     /**
      * Creates a new object on the API server.
-     *
-     * @param ClientInterface $client
-     *
-     * @return self
      *
      * @throws \Psr\Http\Client\ClientExceptionInterface
      */
@@ -613,15 +602,11 @@ abstract class Document implements \JsonSerializable
 
     /**
      * Gets the document type.
-     *
-     * @return string
      */
     abstract public static function getType(): string;
 
     /**
      * Initializes the object from a response array.
-     *
-     * @param array $body
      */
     public function fromArray(array $body): void
     {

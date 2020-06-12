@@ -21,10 +21,6 @@ final class Document extends Resource
     }
 
     /**
-     * @param array $filter
-     *
-     * @return Model\Document\AbstractList
-     *
      * @throws \Exception
      */
     public function list(array $filter = []): Model\Document\AbstractList
@@ -50,13 +46,11 @@ final class Document extends Resource
                 return new Model\Document\TransportDocumentList($this->client, $filter);
         }
 
-        throw new \Exception(sprintf('the type %s does not exist', $this->type));
+        throw new \Exception(\sprintf('the type %s does not exist', $this->type));
     }
 
     /**
      * Creates a new document.
-     *
-     * @param Model\Document\Document $document
      *
      * @throws \Psr\Http\Client\ClientExceptionInterface
      */
@@ -76,7 +70,6 @@ final class Document extends Resource
     /**
      * Updates a subject.
      *
-     * @param string                      $token
      * @param array|Model\Subject\Subject $update
      *
      * @throws \Psr\Http\Client\ClientExceptionInterface

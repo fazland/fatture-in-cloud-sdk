@@ -214,9 +214,6 @@ abstract class Subject implements \JsonSerializable
     /**
      * Fetches a subject from the API.
      *
-     * @param string          $id
-     * @param ClientInterface $client
-     *
      * @return Subject
      *
      * @throws \Psr\Http\Client\ClientExceptionInterface
@@ -245,8 +242,6 @@ abstract class Subject implements \JsonSerializable
 
     /**
      * Creates a new object on the API server.
-     *
-     * @param ClientInterface $client
      *
      * @return Subject
      *
@@ -300,8 +295,6 @@ abstract class Subject implements \JsonSerializable
 
     /**
      * Creates a Subject from a response array.
-     *
-     * @param array $data
      *
      * @return Subject
      */

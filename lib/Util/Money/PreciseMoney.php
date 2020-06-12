@@ -51,8 +51,7 @@ final class PreciseMoney implements \JsonSerializable
     ];
 
     /**
-     * @param int|float|string $amount   Amount, expressed in the smallest units of $currency (eg cents)
-     * @param Currency         $currency
+     * @param int|float|string $amount Amount, expressed in the smallest units of $currency (eg cents)
      *
      * @throws \InvalidArgumentException If amount is not integer
      */
@@ -76,8 +75,6 @@ final class PreciseMoney implements \JsonSerializable
      * @param string $method
      * @param array  $arguments
      *
-     * @return self
-     *
      * @throws \InvalidArgumentException If amount is not integer
      */
     public static function __callStatic($method, $arguments): self
@@ -90,8 +87,6 @@ final class PreciseMoney implements \JsonSerializable
      *
      * @param string $amount
      *
-     * @return self
-     *
      * @throws \InvalidArgumentException If amount is not integer
      */
     private function newInstance($amount): self
@@ -103,17 +98,11 @@ final class PreciseMoney implements \JsonSerializable
      * Checks whether a Money has the same Currency as this.
      *
      * @param Money|PreciseMoney $other
-     *
-     * @return bool
      */
     public function isSameCurrency($other): bool
     {
         if (! $other instanceof Money && ! $other instanceof self) {
-            throw new \TypeError(\sprintf(
-                'Argument 1 passed to %s must be of type Money or PreciseMoney. %s passed',
-                __METHOD__,
-                \is_object($other) ? \get_class($other) : \gettype($other)
-            ));
+            throw new \TypeError(\sprintf('Argument 1 passed to %s must be of type Money or PreciseMoney. %s passed', __METHOD__, \is_object($other) ? \get_class($other) : \gettype($other)));
         }
 
         return $this->currency->equals($other->getCurrency());
@@ -137,8 +126,6 @@ final class PreciseMoney implements \JsonSerializable
      * Checks whether the value represented by this object equals to the other.
      *
      * @param Money|PreciseMoney $other
-     *
-     * @return bool
      */
     public function equals($other): bool
     {
@@ -151,8 +138,6 @@ final class PreciseMoney implements \JsonSerializable
      * less than, equal to, or greater than the other.
      *
      * @param Money|PreciseMoney $other
-     *
-     * @return int
      */
     public function compare($other): int
     {
@@ -165,8 +150,6 @@ final class PreciseMoney implements \JsonSerializable
      * Checks whether the value represented by this object is greater than the other.
      *
      * @param Money|PreciseMoney $other
-     *
-     * @return bool
      */
     public function greaterThan($other): bool
     {
@@ -175,8 +158,6 @@ final class PreciseMoney implements \JsonSerializable
 
     /**
      * @param Money|PreciseMoney $other
-     *
-     * @return bool
      */
     public function greaterThanOrEqual($other): bool
     {
@@ -187,8 +168,6 @@ final class PreciseMoney implements \JsonSerializable
      * Checks whether the value represented by this object is less than the other.
      *
      * @param Money|PreciseMoney $other
-     *
-     * @return bool
      */
     public function lessThan($other): bool
     {
@@ -197,8 +176,6 @@ final class PreciseMoney implements \JsonSerializable
 
     /**
      * @param PreciseMoney $other
-     *
-     * @return bool
      */
     public function lessThanOrEqual($other): bool
     {
@@ -207,8 +184,6 @@ final class PreciseMoney implements \JsonSerializable
 
     /**
      * Returns the value represented by this object.
-     *
-     * @return string
      */
     public function getAmount(): string
     {
@@ -217,8 +192,6 @@ final class PreciseMoney implements \JsonSerializable
 
     /**
      * Returns the currency of this object.
-     *
-     * @return Currency
      */
     public function getCurrency(): Currency
     {
@@ -230,8 +203,6 @@ final class PreciseMoney implements \JsonSerializable
      * the sum of this and an other Money object.
      *
      * @param Money|PreciseMoney $addend
-     *
-     * @return self
      */
     public function add($addend): self
     {
@@ -245,8 +216,6 @@ final class PreciseMoney implements \JsonSerializable
      * the difference of this and an other Money object.
      *
      * @param Money|PreciseMoney $subtrahend
-     *
-     * @return self
      */
     public function subtract($subtrahend): self
     {
@@ -265,10 +234,7 @@ final class PreciseMoney implements \JsonSerializable
     private function assertOperand($operand): void
     {
         if (! \is_numeric($operand)) {
-            throw new \InvalidArgumentException(\sprintf(
-                'Operand should be a numeric value, "%s" given.',
-                \is_object($operand) ? \get_class($operand) : \gettype($operand)
-            ));
+            throw new \InvalidArgumentException(\sprintf('Operand should be a numeric value, "%s" given.', \is_object($operand) ? \get_class($operand) : \gettype($operand)));
         }
     }
 
@@ -277,8 +243,6 @@ final class PreciseMoney implements \JsonSerializable
      * the multiplied value by the given factor.
      *
      * @param float|int|string $multiplier
-     *
-     * @return self
      */
     public function multiply($multiplier): self
     {
@@ -294,8 +258,6 @@ final class PreciseMoney implements \JsonSerializable
      * the divided value by the given factor.
      *
      * @param float|int|string $divisor
-     *
-     * @return self
      */
     public function divide($divisor): self
     {
@@ -312,8 +274,6 @@ final class PreciseMoney implements \JsonSerializable
 
     /**
      * Allocate the money according to a list of ratios.
-     *
-     * @param array $ratios
      *
      * @return self[]
      */
@@ -352,8 +312,6 @@ final class PreciseMoney implements \JsonSerializable
     /**
      * Allocate the money among N targets.
      *
-     * @param int $n
-     *
      * @return self[]
      *
      * @throws \InvalidArgumentException If number of targets is not an integer
@@ -367,9 +325,6 @@ final class PreciseMoney implements \JsonSerializable
         return $this->allocate(\array_fill(0, $n, 1));
     }
 
-    /**
-     * @return self
-     */
     public function absolute(): self
     {
         return $this->newInstance($this->getCalculator()->absolute($this->amount));
@@ -377,8 +332,6 @@ final class PreciseMoney implements \JsonSerializable
 
     /**
      * Checks if the value represented by this object is zero.
-     *
-     * @return bool
      */
     public function isZero(): bool
     {
@@ -387,8 +340,6 @@ final class PreciseMoney implements \JsonSerializable
 
     /**
      * Checks if the value represented by this object is positive.
-     *
-     * @return bool
      */
     public function isPositive(): bool
     {
@@ -397,8 +348,6 @@ final class PreciseMoney implements \JsonSerializable
 
     /**
      * Checks if the value represented by this object is negative.
-     *
-     * @return bool
      */
     public function isNegative(): bool
     {
@@ -407,8 +356,6 @@ final class PreciseMoney implements \JsonSerializable
 
     /**
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function jsonSerialize(): array
     {
@@ -431,8 +378,6 @@ final class PreciseMoney implements \JsonSerializable
     }
 
     /**
-     * @return Calculator
-     *
      * @throws \RuntimeException If cannot find calculator for money calculations
      */
     private static function initializeCalculator(): Calculator
@@ -449,9 +394,6 @@ final class PreciseMoney implements \JsonSerializable
         throw new \RuntimeException('Cannot find calculator for money calculations');
     }
 
-    /**
-     * @return Calculator
-     */
     private function getCalculator(): Calculator
     {
         if (null === self::$calculator) {

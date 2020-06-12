@@ -90,8 +90,6 @@ class Client implements ClientInterface
 
     /**
      * Gets a message factory.
-     *
-     * @return MessageFactory
      */
     private static function getMessageFactory(): MessageFactory
     {

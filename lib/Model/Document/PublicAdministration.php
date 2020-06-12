@@ -154,11 +154,7 @@ final class PublicAdministration
         switch ($name) {
             case 'type':
                 if (null !== $value && self::PUBLIC_ENTITY !== $value && self::B2B !== $value) {
-                    throw new \TypeError(\sprintf(
-                        'type must be one of %s or null. %s passed.',
-                        \implode(', ', [self::PUBLIC_ENTITY, self::B2B]),
-                        (string) $value
-                    ));
+                    throw new \TypeError(\sprintf('type must be one of %s or null. %s passed.', \implode(', ', [self::PUBLIC_ENTITY, self::B2B]), (string) $value));
                 }
 
                 break;
@@ -168,11 +164,7 @@ final class PublicAdministration
                     self::DOCUMENT_TYPE_ORDER !== $value && self::DOCUMENT_TYPE_CONTRACT !== $value &&
                     self::DOCUMENT_TYPE_CONVENTION !== $value && self::DOCUMENT_TYPE_ANY !== $value
                 ) {
-                    throw new \TypeError(\sprintf(
-                        'type must be one of %s or null. %s passed.',
-                        \implode(', ', [self::DOCUMENT_TYPE_ORDER, self::DOCUMENT_TYPE_CONTRACT, self::DOCUMENT_TYPE_CONVENTION, self::DOCUMENT_TYPE_ANY]),
-                        (string) $value
-                    ));
+                    throw new \TypeError(\sprintf('type must be one of %s or null. %s passed.', \implode(', ', [self::DOCUMENT_TYPE_ORDER, self::DOCUMENT_TYPE_CONTRACT, self::DOCUMENT_TYPE_CONVENTION, self::DOCUMENT_TYPE_ANY]), (string) $value));
                 }
 
                 break;

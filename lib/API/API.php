@@ -8,8 +8,6 @@ final class API extends Resource
 {
     /**
      * Gets customer API methods.
-     *
-     * @return Subject
      */
     public function customer(): Subject
     {
@@ -18,8 +16,6 @@ final class API extends Resource
 
     /**
      * Gets supplier API methods.
-     *
-     * @return Subject
      */
     public function supplier(): Subject
     {
@@ -30,8 +26,6 @@ final class API extends Resource
      * Gets document API methods.
      *
      * @param string $type The document type
-     *
-     * @return Document
      */
     public function document(string $type): Document
     {
@@ -40,8 +34,6 @@ final class API extends Resource
 
     /**
      * Gets good API methods.
-     *
-     * @return Good
      */
     public function good(): Good
     {

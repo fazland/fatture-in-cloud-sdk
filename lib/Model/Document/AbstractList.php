@@ -53,27 +53,16 @@ abstract class AbstractList implements \IteratorAggregate
 
     /**
      * Creates a subject object.
-     *
-     * @param ClientInterface $client
-     * @param array           $data
-     *
-     * @return Document
      */
     abstract protected function createDocument(ClientInterface $client, array $data): Document;
 
     /**
      * Gets the subject type name ("clienti" or "fornitori").
-     *
-     * @return string
      */
     abstract protected function getType(): string;
 
     /**
      * Yields subjects from response array.
-     *
-     * @param array $data
-     *
-     * @return \Generator
      */
     private function fromResponse(array $data): \Generator
     {

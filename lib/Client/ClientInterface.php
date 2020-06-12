@@ -10,12 +10,7 @@ interface ClientInterface
     /**
      * Sends a request to the API.
      *
-     * @param string $method
-     * @param string $path
      * @param $requestData
-     * @param array $headers
-     *
-     * @return ResponseInterface
      *
      * @throws \Psr\Http\Client\ClientExceptionInterface
      */
@@ -23,8 +18,6 @@ interface ClientInterface
 
     /**
      * Gets API accessors.
-     *
-     * @return API
      */
     public function api(): API;
 }
