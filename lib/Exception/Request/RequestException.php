@@ -29,9 +29,6 @@ class RequestException extends \RuntimeException
     /**
      * Creates the correct exception for the given response.
      *
-     * @param RequestInterface  $request
-     * @param ResponseInterface $response
-     *
      * @return RequestException
      */
     public static function create(RequestInterface $request, ResponseInterface $response): self
@@ -92,8 +89,6 @@ class RequestException extends \RuntimeException
 
     /**
      * Gets the request originating the exception.
-     *
-     * @return RequestInterface
      */
     public function getRequest(): RequestInterface
     {
@@ -102,8 +97,6 @@ class RequestException extends \RuntimeException
 
     /**
      * Gets the failing response.
-     *
-     * @return ResponseInterface
      */
     public function getResponse(): ResponseInterface
     {

@@ -17,9 +17,6 @@ final class MoneyUtil
      * Converts an amount to a money instance.
      *
      * @param $amount
-     * @param Currency|null $currency
-     *
-     * @return PreciseMoney
      */
     public static function toMoney($amount, Currency $currency = null): PreciseMoney
     {
@@ -29,10 +26,7 @@ final class MoneyUtil
         }
 
         if (null === $currency) {
-            throw new \ArgumentCountError(\sprintf(
-                'Too few arguments to function %s(), 1 passed, 2 expected.',
-                __METHOD__
-            ));
+            throw new \ArgumentCountError(\sprintf('Too few arguments to function %s(), 1 passed, 2 expected.', __METHOD__));
         }
 
         $subUnit = self::getCurrencies()->subunitFor($currency);

@@ -9,9 +9,6 @@ final class Json
     /**
      * Decodes a JSON string into an object/array.
      *
-     * @param string $json
-     * @param bool   $assoc
-     *
      * @return mixed
      *
      * @throws InvalidJSONException

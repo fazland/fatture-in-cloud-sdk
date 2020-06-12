@@ -22,10 +22,6 @@ final class Subject extends Resource
 
     /**
      * Gets a subject list.
-     *
-     * @param array $filter
-     *
-     * @return Model\Subject\AbstractList
      */
     public function list(array $filter = []): Model\Subject\AbstractList
     {
@@ -38,8 +34,6 @@ final class Subject extends Resource
 
     /**
      * Creates a new subject.
-     *
-     * @param Model\Subject\Subject $subject
      *
      * @throws \Psr\Http\Client\ClientExceptionInterface
      */
