@@ -23,8 +23,6 @@ final class Purchase extends Resource
     /**
      * Gets a subject list.
      *
-     * @param array $filter
-     *
      * @return Model\Subject\AbstractList
      */
     public function list(array $filter = []): Model\Purchase\PurchaseList
@@ -46,7 +44,7 @@ final class Purchase extends Resource
 
         $response = $this->client->request('POST', $path, $purchase);
 
-        $result = Json::decode((string)$response->getBody(), true);
+        $result = Json::decode((string) $response->getBody(), true);
         (\Closure::bind(
             function ($id, $client): void {
                 $this->id = $id;
@@ -82,7 +80,6 @@ final class Purchase extends Resource
             );
         }
     }
-
 
     public function delete($idOrPurchase): void
     {

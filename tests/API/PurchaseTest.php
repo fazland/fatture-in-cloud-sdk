@@ -6,10 +6,10 @@ namespace Fazland\FattureInCloud\Tests\API;
 
 use Fazland\FattureInCloud\API\Purchase;
 use Fazland\FattureInCloud\Client\ClientInterface;
+use function GuzzleHttp\Psr7\stream_for;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Http\Message\ResponseInterface;
-use function GuzzleHttp\Psr7\stream_for;
 
 class PurchaseTest extends TestCase
 {

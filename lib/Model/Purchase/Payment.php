@@ -31,7 +31,7 @@ class Payment implements \JsonSerializable
         switch ($name) {
             case 'expireDate':
             case 'paymentDate':
-                $value = str_replace('/', '-', $value);
+                $value = \str_replace('/', '-', $value);
                 $value = new \DateTimeImmutable($value);
                 break;
             default:

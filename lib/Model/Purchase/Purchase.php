@@ -9,7 +9,7 @@ use Fazland\FattureInCloud\Exception\NotFoundException;
 use Fazland\FattureInCloud\Util\Json;
 
 /**
- * @property string $id
+ * @property string    $id
  * @property \DateTime $date
  * @property \DateTime $expireNext
  */
@@ -179,7 +179,7 @@ class Purchase implements \JsonSerializable
             switch ($name) {
                 case 'date':
                 case 'expireNext':
-                    $value = str_replace('/', '-', $value);
+                    $value = \str_replace('/', '-', $value);
                     $value = new \DateTimeImmutable($value);
                     break;
                 default:
@@ -200,9 +200,6 @@ class Purchase implements \JsonSerializable
     /**
      * Fetches a subject from the API.
      *
-     * @param string $id
-     * @param ClientInterface $client
-     *
      * @return Subject
      *
      * @throws \Psr\Http\Client\ClientExceptionInterface
@@ -222,7 +219,7 @@ class Purchase implements \JsonSerializable
             ]
         );
 
-        $result = Json::decode((string)$response->getBody(), true);
+        $result = Json::decode((string) $response->getBody(), true);
         $purchase = $result['dettagli_documento'];
 
         if (empty($purchase)) {
@@ -260,7 +257,7 @@ class Purchase implements \JsonSerializable
                 'numero_fattura' => $this->invoiceNumber,
                 'valuta' => $this->currency,
                 'valuta_cambio' => $this->currencyChange,
-                'lista_pagament' => array_filter(
+                'lista_pagament' => \array_filter(
                     $this->listPayments,
                     function (Payment $payment) {
                         return $payment->jsonSerialize();
@@ -275,8 +272,6 @@ class Purchase implements \JsonSerializable
 
     /**
      * Creates a Purchase from a response array.
-     *
-     * @param array $data
      *
      * @return Purchase
      */

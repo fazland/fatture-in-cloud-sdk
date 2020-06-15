@@ -46,12 +46,9 @@ class PurchaseList implements \IteratorAggregate
 
         return $obj;
     }
+
     /**
      * Yields subjects from response array.
-     *
-     * @param array $data
-     *
-     * @return \Generator
      */
     private function fromResponse(array $data): \Generator
     {
@@ -73,7 +70,7 @@ class PurchaseList implements \IteratorAggregate
     public function getIterator()
     {
         $response = $this->client->request('POST', $this->getType().'/lista', $this->filters);
-        $data = Json::decode((string)$response->getBody(), true);
+        $data = Json::decode((string) $response->getBody(), true);
 
         yield from $this->fromResponse($data['lista_documenti']);
     }
