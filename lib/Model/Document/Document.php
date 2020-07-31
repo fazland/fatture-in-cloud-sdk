@@ -110,6 +110,13 @@ abstract class Document implements \JsonSerializable
     public $vatIncluded;
 
     /**
+     * INPS compensation (not available in TransportDocument and SupplierOrder)
+     *
+     * @var float
+     */
+    public $compensation;
+
+    /**
      * The withholding tax ratio.
      *
      * @var float
@@ -545,6 +552,7 @@ abstract class Document implements \JsonSerializable
             'valuta' => $this->currency->getCode(),
             'valuta_cambio' => null !== $this->exchangeRatio ? \sprintf('%.5f', $this->exchangeRatio->getConversionRatio()) : null,
             'prezzi_ivati' => $this->vatIncluded ?? null,
+            'rivalsa' => $this->compensation ?? null,
             'rit_acconto' => $this->withholdingTaxRatio,
             'imponibile_ritenuta' => $this->withholdingTaxIncome,
             'rit_altra' => $this->withholdingOtherRatio,
@@ -671,6 +679,8 @@ abstract class Document implements \JsonSerializable
         $this->netAmount = isset($body['importo_netto']) ? MoneyUtil::toMoney($body['importo_netto'], $this->currency) : null;
         $this->vatAmount = isset($body['importo_iva']) ? MoneyUtil::toMoney($body['importo_iva'], $this->currency) : null;
         $this->grossAmount = MoneyUtil::toMoney($body['importo_totale'], $this->currency);
+
+        $this->compensation = $body['rivalsa'] ?? null;
 
         $this->withholdingTaxRatio = $body['rit_acconto'] ?? null;
         $this->withholdingTaxIncome = $body['imponibile_ritenuta'] ?? null;
