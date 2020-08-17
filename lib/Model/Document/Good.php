@@ -132,6 +132,13 @@ final class Good implements \JsonSerializable
     public $fromWarehouse;
 
     /**
+     * Initial amount of goods in stock.
+     *
+     * @var int
+     */
+    public $initialStock;
+
+    /**
      * {@inheritdoc}
      */
     public function jsonSerialize(): array
@@ -156,6 +163,7 @@ final class Good implements \JsonSerializable
             'sconto_rosso' => $this->highlightDiscount,
             'in_ddt' => $this->inTransportDocument,
             'magazzino' => $this->fromWarehouse,
+            'giacenza_iniziale' => $this->initialStock
         ], static function ($value): bool {
             return null !== $value && '' !== $value;
         });
