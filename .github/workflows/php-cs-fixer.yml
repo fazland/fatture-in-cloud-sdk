@@ -16,8 +16,7 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Install
-        run: composer install
+      - uses: php-actions/composer@v2
 
       - name: Run php-cs-fixer
         run: ./vendor/bin/php-cs-fixer fix
