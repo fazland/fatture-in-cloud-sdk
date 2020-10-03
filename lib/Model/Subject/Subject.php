@@ -118,6 +118,13 @@ abstract class Subject implements \JsonSerializable
     private $originalData;
 
     /**
+     * The default phone country code.
+     *
+     * @var string|null
+     */
+    private static $defaultPhoneCountryCode = null;
+
+    /**
      * {@inheritdoc}
      */
     public function __get($name)
@@ -148,15 +155,9 @@ abstract class Subject implements \JsonSerializable
     {
         switch ($name) {
             case 'phone':
-                $value = $value ?
-                    PhoneNumberUtil::getInstance()->parse($value, 'IT') :
-                    null;
-                break;
-
             case 'fax':
-                $value = $value ?
-                    PhoneNumberUtil::getInstance()->parse($value, 'IT') :
-                    null;
+                $defaultPhoneCountryCode = static::$defaultPhoneCountryCode ?? 'IT';
+                $value = $value ? PhoneNumberUtil::getInstance()->parse($value, $defaultPhoneCountryCode) : null;
                 break;
 
             default:
@@ -323,5 +324,13 @@ abstract class Subject implements \JsonSerializable
         $this->address->extra = $data['indirizzo_extra'] ?? null;
 
         return $this;
+    }
+
+    /**
+     * Set default phone country code.
+     */
+    public static function setDefaultPhoneCountryCode(string $defaultPhoneCountryCode): void
+    {
+        static::$defaultPhoneCountryCode = $defaultPhoneCountryCode;
     }
 }
