@@ -1,0 +1,19 @@
+name: PHP CS Fixer
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - '**.php'
+
+jobs:
+  php-cs-fixer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: php-actions/composer@v2
+
+      - name: Run php-cs-fixer
+        run: ./vendor/bin/php-cs-fixer fix --dry-run
