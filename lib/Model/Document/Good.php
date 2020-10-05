@@ -163,7 +163,7 @@ final class Good implements \JsonSerializable
             'sconto_rosso' => $this->highlightDiscount,
             'in_ddt' => $this->inTransportDocument,
             'magazzino' => $this->fromWarehouse,
-            'giacenza_iniziale' => $this->initialStock
+            'giacenza_iniziale' => $this->initialStock,
         ], static function ($value): bool {
             return null !== $value && '' !== $value;
         });

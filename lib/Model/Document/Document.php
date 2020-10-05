@@ -110,7 +110,7 @@ abstract class Document implements \JsonSerializable
     public $vatIncluded;
 
     /**
-     * INPS compensation (not available in TransportDocument and SupplierOrder)
+     * INPS compensation (not available in TransportDocument and SupplierOrder).
      *
      * @var float
      */
