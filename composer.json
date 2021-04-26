@@ -3,7 +3,7 @@
     "description": "PHP SDK for FattureinCloud.it APIs",
     "type": "library",
     "require": {
-        "php": ">=7.3",
+        "php": ">=7.4",
         "ext-json": "*",
         "giggsey/libphonenumber-for-php": "^8.10",
         "php-http/discovery": "^1.4",
