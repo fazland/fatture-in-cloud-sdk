@@ -6,9 +6,9 @@ namespace Fazland\FattureInCloud\Tests\API;
 
 use Fazland\FattureInCloud\API\Purchase;
 use Fazland\FattureInCloud\Client\ClientInterface;
-use Prophecy\PhpUnit\ProphecyTrait;
 use function GuzzleHttp\Psr7\stream_for;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Http\Message\ResponseInterface;
 
