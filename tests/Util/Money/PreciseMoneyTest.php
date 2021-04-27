@@ -8,10 +8,13 @@ use Money\Currency;
 use Money\Money;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 final class PreciseMoneyTest extends TestCase
 {
+    use ProphecyTrait;
+
     private const AMOUNT = 10;
     private const OTHER_AMOUNT = 5;
     private const CURRENCY = 'EUR';

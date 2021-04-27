@@ -18,6 +18,7 @@ use Fazland\FattureInCloud\Exception\Request\UnauthorizedException;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
@@ -25,6 +26,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class ClientTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ClientInterface|ObjectProphecy
      */
